@@ -1,0 +1,5 @@
+c:\users\me-uth\documents\visual studio 2013\Projects\plotJS\bin\plotJS.dll.config
+c:\users\me-uth\documents\visual studio 2013\Projects\plotJS\bin\plotJS.dll
+c:\users\me-uth\documents\visual studio 2013\Projects\plotJS\bin\plotJS.pdb
+c:\users\me-uth\documents\visual studio 2013\Projects\plotJS\obj\Debug\plotJS.dll
+c:\users\me-uth\documents\visual studio 2013\Projects\plotJS\obj\Debug\plotJS.pdb

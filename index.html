@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <link rel="stylesheet" href="app.css" type="text/css" />
+</head>
+<body>
+
+    <canvas id="my-pie"></canvas>
+
+    <script src="@script.js"></script>
+
+    <script>
+        var data = {
+            bob: 3,
+            jane: 5,
+            x: 4,
+            yellowZebra: 32,
+            y: 81
+        }
+
+        var options = {};
+
+        var pie = new Plot.Pie("my-pie", data, options);
+    </script>
+</body>
+</html>
