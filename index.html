@@ -8,7 +8,12 @@
 </head>
 <body>
 
-    <canvas id="my-pie"></canvas>
+    <div class="half-box">
+        <canvas id="my-pie"></canvas>
+    </div>
+    <div class="half-box">
+        <canvas id="my-bar"></canvas>
+    </div>
 
     <script src="@script.js"></script>
 
@@ -17,13 +22,17 @@
             bob: 3,
             jane: 5,
             x: 4,
-            yellowZebra: 32,
+            "lots of yellow frogs with jumpers": 32,
             y: 81
         }
 
         var options = {};
 
         var pie = new Plot.Pie("my-pie", data, options);
+        var bar = new Plot.Bar("my-bar", data, options);
+
+        bar.data = pie.data;
+        bar.draw(bar);
     </script>
 </body>
 </html>

@@ -12,3 +12,9 @@ html, body{
 span {
     font-style: italic;
 }
+
+.half-box{
+    height:80%;
+    width: 50%;
+    float:left;
+}

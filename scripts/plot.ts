@@ -10,7 +10,11 @@
 
         baseDraw: () => void;
 
+        options: any;
+
         constructor(id: string, options: Object, sketcher: (item: BasePlot) => void) {
+
+            this.options = options;
 
             this.canvas = <HTMLCanvasElement> document.getElementById(id);
 

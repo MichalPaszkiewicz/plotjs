@@ -43,23 +43,9 @@ module Plot {
 
     }
 
-    class PieDatum {
-
-        key: string;
-        value: number;
-        colour: string;
-
-        constructor(key: string, value: number) {
-            this.key = key;
-            this.value = value;
-            this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
-        }
-
-    }
-
     export class Pie extends BasePlot implements Ianimateable {
 
-        data: PieDatum[];
+        data: KVCDatum[];
 
         animate: () => void;
 
@@ -74,8 +60,15 @@ module Plot {
                 options = defaultOptions;
             }
 
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }        
+
             for (var prop in data) {
-                this.data.push(new PieDatum(prop, data[prop]));
+                this.data.push(new KVCDatum(prop, data[prop]));
             }
 
             super(id, options, draw);

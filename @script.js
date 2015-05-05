@@ -2,6 +2,7 @@ var Plot;
 (function (Plot) {
     var BasePlot = (function () {
         function BasePlot(id, options, sketcher) {
+            this.options = options;
             this.canvas = document.getElementById(id);
             this.context = this.canvas.getContext("2d");
             var me = this;
@@ -22,6 +23,109 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+/// <reference path="plot.ts" />
+var Plot;
+(function (Plot) {
+    function draw(item) {
+        item.baseDraw();
+        var max = Plot.Maths.max(item.data, function (x) {
+            return x.value;
+        });
+        var left = item.options.margin;
+        var right = item.canvas.width - item.options.margin;
+        var top = item.options.margin;
+        var bottom = item.canvas.height - item.options.margin;
+        var effectiveHeight = bottom - top;
+        var effectiveWidth = right - left;
+        //draw axis
+        item.context.beginPath();
+        item.context.moveTo(left, top);
+        item.context.lineTo(left + 5, top + 10);
+        item.context.lineTo(left - 5, top + 10);
+        item.context.lineTo(left, top);
+        item.context.lineTo(left, bottom);
+        item.context.lineTo(right, bottom);
+        item.context.strokeStyle = "black";
+        item.context.stroke();
+        var barWidth = effectiveWidth / item.data.length;
+        var tempLeft = left;
+        for (var i = 0; i < item.data.length; i++) {
+            item.context.fillStyle = item.data[i].colour;
+            item.context.fillRect(tempLeft, bottom, barWidth, -effectiveHeight * item.data[i].value / max);
+            tempLeft += barWidth;
+        }
+    }
+    var defaultOptions = {
+        margin: 10
+    };
+    var Bar = (function (_super) {
+        __extends(Bar, _super);
+        function Bar(id, data, options) {
+            this.data = [];
+            this.animateNum = 0;
+            if (options == null || options == undefined) {
+                options = defaultOptions;
+            }
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }
+            for (var prop in data) {
+                this.data.push(new Plot.KVCDatum(prop, data[prop]));
+            }
+            _super.call(this, id, options, draw);
+            var me = this;
+            me.draw(me);
+        }
+        return Bar;
+    })(Plot.BasePlot);
+    Plot.Bar = Bar;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
+    var KVCDatum = (function () {
+        function KVCDatum(key, value, colour) {
+            this.key = key;
+            this.value = value;
+            this.colour = colour;
+            if (colour == null) {
+                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
+            }
+        }
+        return KVCDatum;
+    })();
+    Plot.KVCDatum = KVCDatum;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
+    var Maths;
+    (function (Maths) {
+        function max(items, value) {
+            var maxNum = 0;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (value(item) > maxNum) {
+                    maxNum = value(item);
+                }
+            }
+            return maxNum;
+        }
+        Maths.max = max;
+        function min(items, value) {
+            var maxNum = Infinity;
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (value(item) < maxNum) {
+                    maxNum = value(item);
+                }
+            }
+            return maxNum;
+        }
+        Maths.min = min;
+    })(Maths = Plot.Maths || (Plot.Maths = {}));
+})(Plot || (Plot = {}));
 /// <reference path="plot.ts" />
 var Plot;
 (function (Plot) {
@@ -54,14 +158,6 @@ var Plot;
         }
     }
     var defaultOptions = {};
-    var PieDatum = (function () {
-        function PieDatum(key, value) {
-            this.key = key;
-            this.value = value;
-            this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
-        }
-        return PieDatum;
-    })();
     var Pie = (function (_super) {
         __extends(Pie, _super);
         function Pie(id, data, options) {
@@ -70,8 +166,14 @@ var Plot;
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }
             for (var prop in data) {
-                this.data.push(new PieDatum(prop, data[prop]));
+                this.data.push(new Plot.KVCDatum(prop, data[prop]));
             }
             _super.call(this, id, options, draw);
             var me = this;

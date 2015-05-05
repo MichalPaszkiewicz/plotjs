@@ -33,8 +33,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <TypeScriptCompile Include="scripts\bar.ts" />
     <TypeScriptCompile Include="scripts\interfaces\Ianimateable.ts" />
+    <TypeScriptCompile Include="scripts\KVCDatum.ts" />
     <TypeScriptCompile Include="scripts\line.ts" />
+    <TypeScriptCompile Include="scripts\maths.ts" />
     <TypeScriptCompile Include="scripts\pie.ts" />
     <TypeScriptCompile Include="scripts\plot.ts" />
     <TypeScriptCompile Include="scripts\plotManager.ts" />
