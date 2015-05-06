@@ -33,6 +33,9 @@
 
         item.context.moveTo(left, bottom - axisPosition);
         item.context.lineTo(right, bottom - axisPosition);
+        item.context.lineTo(right - 10, bottom - axisPosition - 5);
+        item.context.lineTo(right - 10, bottom - axisPosition + 5);
+        item.context.lineTo(right, bottom - axisPosition);
         item.context.strokeStyle = "black";
         item.context.stroke();
 
@@ -41,10 +44,10 @@
 
             for (var j = 0; j < item.data[i].data.length; j++) {
                 item.context.beginPath();
-                var lengthX = item.data[i].data[j].x / maxX;
+                var lengthX =  item.animateNum * (item.data[i].data[j].x - minX) / (maxX - minY);
                 var tempX = left + effectiveWidth * lengthX;
 
-                var heightY = (item.data[i].data[j].y - minY ) / (maxY - minY);
+                var heightY = item.animateNum * (item.data[i].data[j].y - minY ) / (maxY - minY);
                 var tempY = bottom - effectiveHeight * heightY;
 
                 item.context.moveTo(tempX - 3, tempY);
