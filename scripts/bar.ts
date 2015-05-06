@@ -56,14 +56,9 @@ module Plot {
 
         data: KVCDatum[];
 
-        animate: () => void;
-
-        animateNum: number;
-
         constructor(id: string, data: any, options: Object) {
             this.data = [];
 
-            this.animateNum = 0;
 
             if (options == null || options == undefined) {
                 options = defaultOptions;
@@ -83,26 +78,6 @@ module Plot {
             super(id, options, draw);
 
             var me = this;
-
-            this.animate = function () {
-                me.animateNum = 0;
-
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw(me);
-                        return;
-                    }
-                    me.draw(me);
-                    window.requestAnimationFrame(animationFrame);
-                }
-
-                animationFrame();
-
-            }
-
-            this.animate();
 
         }
     }

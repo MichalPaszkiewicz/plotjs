@@ -40,7 +40,7 @@
         var xyData = { values: [], colour: "red" };
 
         for (var i = -200; i < 200; i++) {
-            xyData.values.push({ x: i, y: 4 * Math.sin(i / 10) - 2 *  Math.cos( i / 5)});
+            xyData.values.push({ x: i, y: 4 * Math.sin(i / 20) - 2 *  Math.cos( i / 10)});
         }
 
         var scatter = new Plot.Scatter("my-scatter", xyData, options);
