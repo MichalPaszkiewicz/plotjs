@@ -30,14 +30,14 @@ module Plot {
         for (var i = 0; i < item.data.length; i++) {
             item.context.beginPath();
             item.context.fillStyle = item.data[i].colour;
-            item.context.fillRect(tempLeft, bottom, barWidth, - effectiveHeight * item.data[i].value / max);
+            item.context.fillRect(tempLeft, bottom, barWidth, - item.animateNum * effectiveHeight * item.data[i].value / max);
             item.context.closePath();
 
             item.context.beginPath();
             item.context.textAlign = "center";
             item.context.textBaseline = "middle";
             var isOverHalf = (item.data[i].value) > max / 2;
-            var txtY = bottom - effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10 );
+            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10 );
             item.context.fillStyle = "black";
             item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
 
@@ -84,7 +84,25 @@ module Plot {
 
             var me = this;
 
-            me.draw(me);
+            this.animate = function () {
+                me.animateNum = 0;
+
+                function animationFrame() {
+                    me.animateNum += 0.05;
+                    if (me.animateNum >= 1) {
+                        me.animateNum = 1;
+                        me.draw(me);
+                        return;
+                    }
+                    me.draw(me);
+                    window.requestAnimationFrame(animationFrame);
+                }
+
+                animationFrame();
+
+            }
+
+            this.animate();
 
         }
     }

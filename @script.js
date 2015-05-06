@@ -52,13 +52,13 @@ var Plot;
         for (var i = 0; i < item.data.length; i++) {
             item.context.beginPath();
             item.context.fillStyle = item.data[i].colour;
-            item.context.fillRect(tempLeft, bottom, barWidth, -effectiveHeight * item.data[i].value / max);
+            item.context.fillRect(tempLeft, bottom, barWidth, -item.animateNum * effectiveHeight * item.data[i].value / max);
             item.context.closePath();
             item.context.beginPath();
             item.context.textAlign = "center";
             item.context.textBaseline = "middle";
             var isOverHalf = (item.data[i].value) > max / 2;
-            var txtY = bottom - effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10);
+            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10);
             item.context.fillStyle = "black";
             item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
             tempLeft += barWidth;
@@ -86,7 +86,21 @@ var Plot;
             }
             _super.call(this, id, options, draw);
             var me = this;
-            me.draw(me);
+            this.animate = function () {
+                me.animateNum = 0;
+                function animationFrame() {
+                    me.animateNum += 0.05;
+                    if (me.animateNum >= 1) {
+                        me.animateNum = 1;
+                        me.draw(me);
+                        return;
+                    }
+                    me.draw(me);
+                    window.requestAnimationFrame(animationFrame);
+                }
+                animationFrame();
+            };
+            this.animate();
         }
         return Bar;
     })(Plot.BasePlot);
@@ -106,6 +120,53 @@ var Plot;
         return KVCDatum;
     })();
     Plot.KVCDatum = KVCDatum;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
+    var xyData = (function () {
+        // values have to be of the form {x: 3423, y: 12312}
+        function xyData(values, colour) {
+            this.data = values;
+            this.colour = colour;
+            if (colour == null) {
+                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
+            }
+        }
+        return xyData;
+    })();
+    Plot.xyData = xyData;
+    function toXYData(items) {
+        if (Object.prototype.toString.call(items) === "[object Array]") {
+            if (items.length = 0) {
+                return [];
+            }
+            var isWorking = true;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].values == null || items[i].colour == null) {
+                    throw new Error("The xy data supplied is incorrect");
+                    isWorking = false;
+                }
+            }
+            if (isWorking) {
+                //change from array to stuff
+                var xyDataeaeaeae = [];
+                for (var i = 0; i < items.length; i++) {
+                    xyDataeaeaeae.push(new xyData(items[i].values, items[i].colour));
+                }
+                return xyDataeaeaeae;
+            }
+        }
+        else {
+            if (items.values == null || items.colour == null) {
+                throw new Error("The xy data supplied is incorrect");
+            }
+            else {
+                //change from object to stuff
+                return [new xyData(items.values, items.colour)];
+            }
+        }
+    }
+    Plot.toXYData = toXYData;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
@@ -226,5 +287,88 @@ var Plot;
         return PlotManager;
     })();
     Plot.plotManager = new PlotManager();
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
+    function draw(item) {
+        item.baseDraw();
+        var left = item.options.margin;
+        var right = item.canvas.width - item.options.margin;
+        var top = item.options.margin;
+        var bottom = item.canvas.height - item.options.margin;
+        var effectiveHeight = bottom - top;
+        var effectiveWidth = right - left;
+        //draw axis
+        item.context.beginPath();
+        item.context.moveTo(left, top);
+        item.context.lineTo(left + 5, top + 10);
+        item.context.lineTo(left - 5, top + 10);
+        item.context.lineTo(left, top);
+        item.context.lineTo(left, bottom);
+        item.context.lineTo(right, bottom);
+        item.context.strokeStyle = "black";
+        item.context.stroke();
+        var maxX = Plot.Maths.max(item.data, function (x) {
+            return Plot.Maths.max(x.data, function (y) {
+                return y.x;
+            });
+        });
+        var maxY = Plot.Maths.max(item.data, function (x) {
+            return Plot.Maths.max(x.data, function (y) {
+                return y.y;
+            });
+        });
+        for (var i = 0; i < item.data.length; i++) {
+            item.context.strokeStyle = item.data[i].colour;
+            for (var j = 0; j < item.data[i].data.length; j++) {
+                item.context.beginPath();
+                var tempX = left + effectiveWidth * item.data[i].data[j].x / maxX;
+                var tempY = top + bottom - effectiveHeight * item.data[i].data[j].y / maxY;
+                item.context.moveTo(tempX - 3, tempY);
+                item.context.lineTo(tempX + 3, tempY);
+                item.context.moveTo(tempX, tempY - 3);
+                item.context.lineTo(tempX, tempY + 3);
+                item.context.stroke();
+            }
+        }
+    }
+    var defaultOptions = {
+        margin: 10
+    };
+    var Scatter = (function (_super) {
+        __extends(Scatter, _super);
+        function Scatter(id, data, options) {
+            this.animateNum = 0;
+            if (options == null || options == undefined) {
+                options = defaultOptions;
+            }
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }
+            this.data = Plot.toXYData(data);
+            _super.call(this, id, options, draw);
+            var me = this;
+            this.animate = function () {
+                me.animateNum = 0;
+                function animationFrame() {
+                    me.animateNum += 0.05;
+                    if (me.animateNum >= 1) {
+                        me.animateNum = 1;
+                        me.draw(me);
+                        return;
+                    }
+                    me.draw(me);
+                    window.requestAnimationFrame(animationFrame);
+                }
+                animationFrame();
+            };
+            this.animate();
+        }
+        return Scatter;
+    })(Plot.BasePlot);
+    Plot.Scatter = Scatter;
 })(Plot || (Plot = {}));
 //# sourceMappingURL=@script.js.map

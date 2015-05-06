@@ -14,6 +14,9 @@
     <div class="half-box">
         <canvas id="my-bar"></canvas>
     </div>
+    <div class="half-box">
+        <canvas id="my-scatter"></canvas>
+    </div>
 
     <script src="@script.js"></script>
 
@@ -33,6 +36,10 @@
 
         bar.data = pie.data;
         bar.draw(bar);
+
+        var xyData = { values: [{ x: 5, y: 4 }, { x: 2, y: 7 }, { x: 12, y: 1 }, { x: 0, y: 5 }], colour: "red" };
+
+        var scatter = new Plot.Scatter("my-scatter", xyData, options);
     </script>
 </body>
 </html>
