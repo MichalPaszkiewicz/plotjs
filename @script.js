@@ -328,11 +328,12 @@ var Plot;
         item.context.stroke();
         for (var i = 0; i < item.data.length; i++) {
             item.context.strokeStyle = item.data[i].colour;
-            for (var j = 0; j < item.data[i].data.length; j++) {
+            var nums = Math.round(item.data[i].data.length * item.animateNum / 1);
+            for (var j = 0; j < nums; j++) {
                 item.context.beginPath();
-                var lengthX = item.animateNum * (item.data[i].data[j].x - minX) / (maxX - minX);
+                var lengthX = (item.data[i].data[j].x - minX) / (maxX - minX);
                 var tempX = left + effectiveWidth * lengthX;
-                var heightY = item.animateNum * (item.data[i].data[j].y - minY) / (maxY - minY);
+                var heightY = (item.data[i].data[j].y - minY) / (maxY - minY);
                 var tempY = bottom - effectiveHeight * heightY;
                 item.context.moveTo(tempX - 3, tempY);
                 item.context.lineTo(tempX + 3, tempY);
@@ -343,10 +344,10 @@ var Plot;
         }
         for (var c = 0; c < item.curves.length; c++) {
             var steps = 3000;
-            for (var i = minX; i < maxX; i += (maxX - minX) / steps) {
-                var lengthX = item.animateNum * (i - minX) / (maxX - minX);
+            for (var i = minX; i < maxX - (maxX - minX) * (1 - item.animateNum); i += (maxX - minX) / steps) {
+                var lengthX = (i - minX) / (maxX - minX);
                 var tempX = left + effectiveWidth * lengthX;
-                var heightY = item.animateNum * (item.curves[c](i) - minY) / (maxY - minY);
+                var heightY = (item.curves[c](i) - minY) / (maxY - minY);
                 var tempY = bottom - effectiveHeight * heightY;
                 item.context.fillRect(tempX, tempY, 1, 1);
             }
