@@ -37,7 +37,11 @@
         bar.data = pie.data;
         bar.draw(bar);
 
-        var xyData = { values: [{ x: 5, y: 4 }, { x: 2, y: 7 }, { x: 12, y: 1 }, { x: 0, y: 5 }], colour: "red" };
+        var xyData = { values: [], colour: "red" };
+
+        for (var i = 0; i < 200; i++) {
+            xyData.values.push({ x: i, y: 4 * Math.sin(i / 10) - 2 *  Math.cos( i / 5)});
+        }
 
         var scatter = new Plot.Scatter("my-scatter", xyData, options);
     </script>
