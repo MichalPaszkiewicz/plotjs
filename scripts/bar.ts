@@ -28,9 +28,21 @@ module Plot {
         var tempLeft = left;
 
         for (var i = 0; i < item.data.length; i++) {
+            item.context.beginPath();
             item.context.fillStyle = item.data[i].colour;
             item.context.fillRect(tempLeft, bottom, barWidth, - effectiveHeight * item.data[i].value / max);
+            item.context.closePath();
+
+            item.context.beginPath();
+            item.context.textAlign = "center";
+            item.context.textBaseline = "middle";
+            var isOverHalf = (item.data[i].value) > max / 2;
+            var txtY = bottom - effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10 );
+            item.context.fillStyle = "black";
+            item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
+
             tempLeft += barWidth;
+
         }
     }
 
