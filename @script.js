@@ -2,6 +2,7 @@ var Plot;
 (function (Plot) {
     var BasePlot = (function () {
         function BasePlot(id, options, sketcher) {
+            this.animateNum = 0;
             this.options = options;
             this.canvas = document.getElementById(id);
             this.context = this.canvas.getContext("2d");
@@ -12,6 +13,21 @@ var Plot;
             };
             this.draw = sketcher;
             Plot.plotManager.addPlot(me);
+            this.animate = function () {
+                me.animateNum = 0;
+                function animationFrame() {
+                    me.animateNum += 0.05;
+                    if (me.animateNum >= 1) {
+                        me.animateNum = 1;
+                        me.draw(me);
+                        return;
+                    }
+                    me.draw(me);
+                    window.requestAnimationFrame(animationFrame);
+                }
+                animationFrame();
+            };
+            this.animate();
         }
         return BasePlot;
     })();
@@ -71,7 +87,6 @@ var Plot;
         __extends(Bar, _super);
         function Bar(id, data, options) {
             this.data = [];
-            this.animateNum = 0;
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }
@@ -86,21 +101,6 @@ var Plot;
             }
             _super.call(this, id, options, draw);
             var me = this;
-            this.animate = function () {
-                me.animateNum = 0;
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw(me);
-                        return;
-                    }
-                    me.draw(me);
-                    window.requestAnimationFrame(animationFrame);
-                }
-                animationFrame();
-            };
-            this.animate();
         }
         return Bar;
     })(Plot.BasePlot);
@@ -232,7 +232,6 @@ var Plot;
         __extends(Pie, _super);
         function Pie(id, data, options) {
             this.data = [];
-            this.animateNum = 0;
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }
@@ -248,21 +247,6 @@ var Plot;
             _super.call(this, id, options, draw);
             var me = this;
             //this.draw(me);
-            this.animate = function () {
-                me.animateNum = 0;
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw(me);
-                        return;
-                    }
-                    me.draw(me);
-                    window.requestAnimationFrame(animationFrame);
-                }
-                animationFrame();
-            };
-            this.animate();
         }
         return Pie;
     })(Plot.BasePlot);
@@ -364,7 +348,6 @@ var Plot;
     var Scatter = (function (_super) {
         __extends(Scatter, _super);
         function Scatter(id, data, options) {
-            this.animateNum = 0;
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }
@@ -377,21 +360,6 @@ var Plot;
             this.data = Plot.toXYData(data);
             _super.call(this, id, options, draw);
             var me = this;
-            this.animate = function () {
-                me.animateNum = 0;
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw(me);
-                        return;
-                    }
-                    me.draw(me);
-                    window.requestAnimationFrame(animationFrame);
-                }
-                animationFrame();
-            };
-            this.animate();
         }
         return Scatter;
     })(Plot.BasePlot);

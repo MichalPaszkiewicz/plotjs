@@ -74,14 +74,9 @@
     export class Scatter extends BasePlot implements Ianimateable {
         data: xyData[];
 
-        animateNum: number;
-
-        animate: () => void;
-
 
         constructor(id: string, data: any, options: any) {
 
-            this.animateNum = 0;
             
             if (options == null || options == undefined) {
                 options = defaultOptions;
@@ -99,26 +94,6 @@
             super(id, options, draw);
 
             var me = this;
-
-            this.animate = function () {
-                me.animateNum = 0;
-
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw(me);
-                        return;
-                    }
-                    me.draw(me);
-                    window.requestAnimationFrame(animationFrame);
-                }
-
-                animationFrame();
-
-            }
-
-            this.animate();
         }
     }
 

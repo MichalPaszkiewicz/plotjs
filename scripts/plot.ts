@@ -12,7 +12,13 @@
 
         options: any;
 
+        animate: () => void;
+
+        animateNum: number;
+
         constructor(id: string, options: Object, sketcher: (item: BasePlot) => void) {
+
+            this.animateNum = 0;
 
             this.options = options;
 
@@ -30,6 +36,26 @@
             this.draw = sketcher;
 
             plotManager.addPlot(me);
+
+            this.animate = function () {
+                me.animateNum = 0;
+
+                function animationFrame() {
+                    me.animateNum += 0.05;
+                    if (me.animateNum >= 1) {
+                        me.animateNum = 1;
+                        me.draw(me);
+                        return;
+                    }
+                    me.draw(me);
+                    window.requestAnimationFrame(animationFrame);
+                }
+
+                animationFrame();
+
+            }
+
+            this.animate();
         }
     }
 
