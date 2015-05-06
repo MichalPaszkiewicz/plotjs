@@ -62,6 +62,17 @@
                 item.context.stroke();
             } 
         }
+
+        var steps = 4000;
+        for (var i = minX; i < maxX; i+= (maxX - minX) / steps) {
+            var lengthX = item.animateNum * (i - minX) / (maxX - minX);
+            var tempX = left + effectiveWidth * lengthX;
+
+            var heightY = item.animateNum * (item.curve(i) - minY) / (maxY - minY);
+            var tempY = bottom - effectiveHeight * heightY;
+
+            item.context.fillRect(tempX, tempY,1,1);
+        }
     }
 
     var defaultOptions = {
@@ -72,12 +83,15 @@
 
 
     export class Scatter extends BasePlot implements Ianimateable {
+
         data: xyData[];
 
+        curve: (x) => number;
 
         constructor(id: string, data: any, options: any) {
 
-            
+            this.curve = function (x) { return x; };
+
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }

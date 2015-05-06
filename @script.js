@@ -341,6 +341,14 @@ var Plot;
                 item.context.stroke();
             }
         }
+        var steps = 4000;
+        for (var i = minX; i < maxX; i += (maxX - minX) / steps) {
+            var lengthX = item.animateNum * (i - minX) / (maxX - minX);
+            var tempX = left + effectiveWidth * lengthX;
+            var heightY = item.animateNum * (item.curve(i) - minY) / (maxY - minY);
+            var tempY = bottom - effectiveHeight * heightY;
+            item.context.fillRect(tempX, tempY, 1, 1);
+        }
     }
     var defaultOptions = {
         margin: 10
@@ -348,6 +356,9 @@ var Plot;
     var Scatter = (function (_super) {
         __extends(Scatter, _super);
         function Scatter(id, data, options) {
+            this.curve = function (x) {
+                return x;
+            };
             if (options == null || options == undefined) {
                 options = defaultOptions;
             }
