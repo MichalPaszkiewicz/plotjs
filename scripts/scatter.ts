@@ -18,24 +18,29 @@
         var minX = Math.min(0, minValX);
         var minY = Math.min(0, minValY);
 
-        var axisPosition = 0
+        var yAxisPosition = 0;
+        if (minX < 0) {
+            yAxisPosition = effectiveWidth * (- minX) / (maxX - minX);
+        }
+
+        var xAxisPosition = 0;
         if (minY < 0) {
-            axisPosition = effectiveHeight * (- minY) / (maxY - minY);
+            xAxisPosition = effectiveHeight * (- minY) / (maxY - minY);
         }
 
         //draw axis
         item.context.beginPath();
-        item.context.moveTo(left, top);
-        item.context.lineTo(left + 5, top + 10);
-        item.context.lineTo(left - 5, top + 10);
-        item.context.lineTo(left, top);
-        item.context.lineTo(left, bottom);
+        item.context.moveTo(left + yAxisPosition, top);
+        item.context.lineTo(left + yAxisPosition + 5, top + 10);
+        item.context.lineTo(left + yAxisPosition - 5, top + 10);
+        item.context.lineTo(left + yAxisPosition, top);
+        item.context.lineTo(left + yAxisPosition, bottom);
 
-        item.context.moveTo(left, bottom - axisPosition);
-        item.context.lineTo(right, bottom - axisPosition);
-        item.context.lineTo(right - 10, bottom - axisPosition - 5);
-        item.context.lineTo(right - 10, bottom - axisPosition + 5);
-        item.context.lineTo(right, bottom - axisPosition);
+        item.context.moveTo(left, bottom - xAxisPosition);
+        item.context.lineTo(right, bottom - xAxisPosition);
+        item.context.lineTo(right - 10, bottom - xAxisPosition - 5);
+        item.context.lineTo(right - 10, bottom - xAxisPosition + 5);
+        item.context.lineTo(right, bottom - xAxisPosition);
         item.context.strokeStyle = "black";
         item.context.stroke();
 
@@ -44,7 +49,7 @@
 
             for (var j = 0; j < item.data[i].data.length; j++) {
                 item.context.beginPath();
-                var lengthX =  item.animateNum * (item.data[i].data[j].x - minX) / (maxX - minY);
+                var lengthX =  item.animateNum * (item.data[i].data[j].x - minX) / (maxX - minX);
                 var tempX = left + effectiveWidth * lengthX;
 
                 var heightY = item.animateNum * (item.data[i].data[j].y - minY ) / (maxY - minY);
