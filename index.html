@@ -45,7 +45,8 @@
 
         var scatter = new Plot.Scatter("my-scatter", xyData, options);
 
-        scatter.curve = function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) }
+        scatter.curves.push(function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) });
+        scatter.curves.push(function (i) { return Math.sin(i / 4); });
     </script>
 </body>
 </html>
