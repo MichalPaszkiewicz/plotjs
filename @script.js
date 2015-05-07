@@ -108,6 +108,20 @@ var Plot;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
+    var Curve = (function () {
+        function Curve(formula, colour) {
+            this.formula = formula;
+            this.colour = colour;
+            if (colour == null || colour == undefined) {
+                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
+            }
+        }
+        return Curve;
+    })();
+    Plot.Curve = Curve;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
     var KVCDatum = (function () {
         function KVCDatum(key, value, colour) {
             this.key = key;
@@ -347,8 +361,9 @@ var Plot;
             for (var i = minX; i < maxX - (maxX - minX) * (1 - item.animateNum); i += (maxX - minX) / steps) {
                 var lengthX = (i - minX) / (maxX - minX);
                 var tempX = left + effectiveWidth * lengthX;
-                var heightY = (item.curves[c](i) - minY) / (maxY - minY);
+                var heightY = (item.curves[c].formula(i) - minY) / (maxY - minY);
                 var tempY = bottom - effectiveHeight * heightY;
+                item.context.fillStyle = item.curves[c].colour;
                 item.context.fillRect(tempX, tempY, 1, 1);
             }
         }
@@ -372,6 +387,9 @@ var Plot;
             this.data = Plot.toXYData(data);
             _super.call(this, id, options, draw);
             var me = this;
+            this.addCurve = function (formula, colour) {
+                me.curves.push(new Plot.Curve(formula, colour));
+            };
         }
         return Scatter;
     })(Plot.BasePlot);
