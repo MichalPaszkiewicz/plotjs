@@ -38,6 +38,10 @@
         <div class="graph-box">
             <canvas id="my-scatter"></canvas>
         </div>
+        <div class="graph-box">
+            <canvas id="my-box-and-whisker"></canvas>
+        </div>
+
         <h2 class="clear">All of the above charts were generated with just this code:</h2>
         <div class="code-container clear">
 <pre class=""><code style="background: none;" class="javascript">
@@ -101,6 +105,14 @@ scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");
 
         scatter.addCurve(function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) }, "orange");
         scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");
+
+        var xData = { values: [], colour: "red" };
+
+        for (var i = 0; i < 20; i++){
+            xData.values.push({ x: i * 2 });
+        }
+
+        var boxAndWhisker = new Plot.BoxAndWhisker("my-box-and-whisker", xData, options);
     </script>
     <script>hljs.initHighlightingOnLoad();</script>
 </body>
