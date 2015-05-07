@@ -115,6 +115,23 @@ var Plot;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
+    function draw(item) {
+    }
+    var defaultOptions = {};
+    var BoxAndWhisker = (function (_super) {
+        __extends(BoxAndWhisker, _super);
+        function BoxAndWhisker(id, data, options) {
+            this.data = [];
+            this.data = Plot.toXData(data);
+            _super.call(this, id, options, draw, defaultOptions);
+            var me = this;
+        }
+        return BoxAndWhisker;
+    })(Plot.BasePlot);
+    Plot.BoxAndWhisker = BoxAndWhisker;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
     var Curve = (function () {
         function Curve(formula, colour) {
             this.formula = formula;
@@ -141,6 +158,53 @@ var Plot;
         return KVCDatum;
     })();
     Plot.KVCDatum = KVCDatum;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
+    var xData = (function () {
+        // values have to be of the form {x: 3423, y: 12312}
+        function xData(values, colour) {
+            this.data = values;
+            this.colour = colour;
+            if (colour == null) {
+                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
+            }
+        }
+        return xData;
+    })();
+    Plot.xData = xData;
+    function toXData(items) {
+        if (Object.prototype.toString.call(items) === "[object Array]") {
+            if (items.length = 0) {
+                return [];
+            }
+            var isWorking = true;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].values == null || items[i].colour == null) {
+                    throw new Error("The x data supplied is incorrect");
+                    isWorking = false;
+                }
+            }
+            if (isWorking) {
+                //change from array to stuff
+                var xyDataeaeaeae = [];
+                for (var i = 0; i < items.length; i++) {
+                    xyDataeaeaeae.push(new xData(items[i].values, items[i].colour));
+                }
+                return xyDataeaeaeae;
+            }
+        }
+        else {
+            if (items.values == null || items.colour == null) {
+                throw new Error("The x data supplied is incorrect");
+            }
+            else {
+                //change from object to stuff
+                return [new xData(items.values, items.colour)];
+            }
+        }
+    }
+    Plot.toXData = toXData;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
