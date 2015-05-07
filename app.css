@@ -2,19 +2,78 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-html, body{
+html, body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Poiret One', cursive;
 }
 
-span {
-    font-style: italic;
+#main-container {
+    width: 100%;
+    min-height: 100%;
+    text-align: center;
 }
 
-.half-box{
-    height:80%;
+header, footer, .push {
+    height: 50px;
+}
+
+header, footer {
+    background: black;
+    color: white;
+}
+
+.push, footer, .clear {
+    clear: both;
+}
+
+.code-container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}
+
+pre {
+    text-align: left;
+    overflow: auto;
+    white-space: pre-wrap; /* CSS3 browsers  */
+    white-space: -moz-pre-wrap !important; /* 1999+ Mozilla  */
+    white-space: -pre-wrap; /* Opera 4 thru 6 */
+    white-space: -o-pre-wrap; /* Opera 7 and up */
+    word-wrap: break-word; /* IE 5.5+ and up */
+    /* overflow-x: auto; */ /* Firefox 2 only */
+    /* width: 99%; */ /* only if needed */
+}
+
+header {
+    position: fixed;
+    width: 100%;
+}
+
+footer {
+    margin-top: -50px;
+}
+
+    header h1, footer a {
+        display: block;
+        text-decoration: none;
+        color: white;
+        margin: auto;
+        width: 200px;
+        text-align: center;
+        padding: 0;
+        line-height: 50px;
+    }
+
+        footer a:hover {
+            color: navajowhite;
+        }
+
+.graph-box {
     width: 50%;
-    float:left;
+    min-width: 400px;
+    height: 400px;
+    float: left;
 }
