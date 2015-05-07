@@ -71,9 +71,10 @@
                 var lengthX = (i - minX) / (maxX - minX);
                 var tempX = left + effectiveWidth * lengthX;
 
-                var heightY = (item.curves[c](i) - minY) / (maxY - minY);
+                var heightY = (item.curves[c].formula(i) - minY) / (maxY - minY);
                 var tempY = bottom - effectiveHeight * heightY;
 
+                item.context.fillStyle = item.curves[c].colour;
                 item.context.fillRect(tempX, tempY, 1, 1);
             }
         }
@@ -90,7 +91,9 @@
 
         data: xyData[];
 
-        curves: ((x) => number)[];
+        curves: Curve[];
+
+        addCurve: (x: any, colour: string) => void;
 
         constructor(id: string, data: any, options: any) {
 
@@ -112,6 +115,10 @@
             super(id, options, draw);
 
             var me = this;
+            
+            this.addCurve = function (formula, colour) {
+                me.curves.push(new Curve(formula, colour));
+            }
         }
     }
 
