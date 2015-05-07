@@ -1,5 +1,10 @@
 ﻿module Plot {
 
+    var defaultOptions = {
+
+
+    }
+
     export class BasePlot {
 
         canvas: HTMLCanvasElement;
@@ -16,11 +21,29 @@
 
         animateNum: number;
 
-        constructor(id: string, options: Object, sketcher: (item: BasePlot) => void) {
+        constructor(id: string, options: Object, sketcher: (item: BasePlot) => void, specificDefaults: any) {
 
             this.animateNum = 0;
 
-            this.options = options;
+            var tempOptions = options;
+
+            if (options == null || options == undefined) {
+                tempOptions = defaultOptions;
+            }
+
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }
+            for (var prop in specificDefaults) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = specificDefaults[prop];
+                }
+            }
+
+            this.options = tempOptions;
 
             this.canvas = <HTMLCanvasElement> document.getElementById(id);
 

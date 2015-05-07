@@ -57,25 +57,13 @@ module Plot {
         data: KVCDatum[];
 
         constructor(id: string, data: any, options: Object) {
-            this.data = [];
-
-
-            if (options == null || options == undefined) {
-                options = defaultOptions;
-            }
-
-            var tempOptions = options;
-            for (var prop in defaultOptions) {
-                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
-                    tempOptions[prop] = defaultOptions[prop];
-                }                
-            }            
+            this.data = [];        
 
             for (var prop in data) {
                 this.data.push(new KVCDatum(prop, data[prop]));
             }
 
-            super(id, options, draw);
+            super(id, options, draw, defaultOptions);
 
             var me = this;
 

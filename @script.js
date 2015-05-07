@@ -1,9 +1,25 @@
 var Plot;
 (function (Plot) {
+    var defaultOptions = {};
     var BasePlot = (function () {
-        function BasePlot(id, options, sketcher) {
+        function BasePlot(id, options, sketcher, specificDefaults) {
             this.animateNum = 0;
-            this.options = options;
+            var tempOptions = options;
+            if (options == null || options == undefined) {
+                tempOptions = defaultOptions;
+            }
+            var tempOptions = options;
+            for (var prop in defaultOptions) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = defaultOptions[prop];
+                }
+            }
+            for (var prop in specificDefaults) {
+                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
+                    tempOptions[prop] = specificDefaults[prop];
+                }
+            }
+            this.options = tempOptions;
             this.canvas = document.getElementById(id);
             this.context = this.canvas.getContext("2d");
             var me = this;
@@ -87,19 +103,10 @@ var Plot;
         __extends(Bar, _super);
         function Bar(id, data, options) {
             this.data = [];
-            if (options == null || options == undefined) {
-                options = defaultOptions;
-            }
-            var tempOptions = options;
-            for (var prop in defaultOptions) {
-                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
-                    tempOptions[prop] = defaultOptions[prop];
-                }
-            }
             for (var prop in data) {
                 this.data.push(new Plot.KVCDatum(prop, data[prop]));
             }
-            _super.call(this, id, options, draw);
+            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
         }
         return Bar;
@@ -246,21 +253,11 @@ var Plot;
         __extends(Pie, _super);
         function Pie(id, data, options) {
             this.data = [];
-            if (options == null || options == undefined) {
-                options = defaultOptions;
-            }
-            var tempOptions = options;
-            for (var prop in defaultOptions) {
-                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
-                    tempOptions[prop] = defaultOptions[prop];
-                }
-            }
             for (var prop in data) {
                 this.data.push(new Plot.KVCDatum(prop, data[prop]));
             }
-            _super.call(this, id, options, draw);
+            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
-            //this.draw(me);
         }
         return Pie;
     })(Plot.BasePlot);
@@ -375,17 +372,8 @@ var Plot;
         __extends(Scatter, _super);
         function Scatter(id, data, options) {
             this.curves = [];
-            if (options == null || options == undefined) {
-                options = defaultOptions;
-            }
-            var tempOptions = options;
-            for (var prop in defaultOptions) {
-                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
-                    tempOptions[prop] = defaultOptions[prop];
-                }
-            }
             this.data = Plot.toXYData(data);
-            _super.call(this, id, options, draw);
+            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
             this.addCurve = function (formula, colour) {
                 me.curves.push(new Plot.Curve(formula, colour));

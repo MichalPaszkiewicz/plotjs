@@ -97,22 +97,11 @@
 
         constructor(id: string, data: any, options: any) {
 
-            this.curves = [];
-
-            if (options == null || options == undefined) {
-                options = defaultOptions;
-            }
-
-            var tempOptions = options;
-            for (var prop in defaultOptions) {
-                if (tempOptions[prop] == null || tempOptions[prop] == undefined) {
-                    tempOptions[prop] = defaultOptions[prop];
-                }
-            }        
+            this.curves = [];   
 
             this.data = toXYData(data);
 
-            super(id, options, draw);
+            super(id, options, draw, defaultOptions);
 
             var me = this;
             
