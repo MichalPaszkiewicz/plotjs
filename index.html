@@ -106,10 +106,12 @@ scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");
         scatter.addCurve(function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) }, "orange");
         scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");
 
-        var xData = { values: [], colour: "red" };
+        var xData = [{ values: [], colour: "red" }, { values: [], colour: "blue" }, { values: [], colour: "green" }];
 
         for (var i = 0; i < 20; i++){
-            xData.values.push({ x: i * 2 });
+            xData[0].values.push({ x: i * 2 + 5 });
+            xData[1].values.push({ x: i / 2 + 12 });
+            xData[2].values.push({ x: i * i / 20 + 10});
         }
 
         var boxAndWhisker = new Plot.BoxAndWhisker("my-box-and-whisker", xData, options);

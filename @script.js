@@ -122,10 +122,10 @@ var Plot;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
-    function drawLineAt(item, x, y) {
-        item.context.moveTo(x, y + 25);
+    function drawLineAt(item, x, y, height) {
+        item.context.moveTo(x, y + height / 2);
         item.context.lineTo(x, y);
-        item.context.moveTo(x, y - 25);
+        item.context.moveTo(x, y - height / 2);
         item.context.lineTo(x, y);
     }
     function draw(item) {
@@ -133,12 +133,19 @@ var Plot;
         var max = Plot.Maths.max(item.data, function (x) {
             return x.value;
         });
+        var totalTop = item.options.margin;
+        var totalBottom = item.canvas.height - item.options.margin;
+        var top = totalTop;
+        var bottom = totalBottom;
         var left = item.options.margin;
         var right = item.canvas.width - item.options.margin;
-        var top = item.options.margin;
-        var bottom = item.canvas.height - item.options.margin;
         var effectiveHeight = bottom - top;
         var effectiveWidth = right - left;
+        var totalMax = Plot.Maths.max(item.data, function (x) {
+            return Plot.Maths.max(x.data, function (y) {
+                return y.x;
+            });
+        });
         item.context.beginPath();
         item.context.moveTo(left, bottom);
         item.context.lineTo(right, bottom);
@@ -146,21 +153,32 @@ var Plot;
         item.context.lineTo(right - 10, bottom + 5);
         item.context.lineTo(right, bottom);
         item.context.stroke();
-        var min = 20;
-        var max = 100;
-        var lowerQuartile = 30;
-        var upperQuartile = 60;
-        var median = 50;
-        item.context.beginPath();
-        drawLineAt(item, left + effectiveWidth * min / max, top + effectiveHeight / 2 - 10);
-        item.context.lineTo(left + effectiveWidth * lowerQuartile / max, top + effectiveHeight / 2 - 10);
-        drawLineAt(item, left + effectiveWidth * lowerQuartile / max, top + effectiveHeight / 2 - 10);
-        drawLineAt(item, left + effectiveWidth * median / max, top + effectiveHeight / 2 - 10);
-        drawLineAt(item, left + effectiveWidth * upperQuartile / max, top + effectiveHeight / 2 - 10);
-        item.context.lineTo(left + effectiveWidth, top + effectiveHeight / 2 - 10);
-        drawLineAt(item, left + effectiveWidth, top + effectiveHeight / 2 - 10);
-        item.context.rect(left + effectiveWidth * lowerQuartile / max, top + effectiveHeight / 2 - 35, effectiveWidth * (upperQuartile - lowerQuartile) / max, 50);
-        item.context.stroke();
+        var singlePlotHeight = effectiveHeight / item.data.length;
+        for (var i = 0; i < item.data.length; i++) {
+            item.context.strokeStyle = item.data[i].colour;
+            var min = Plot.Maths.min(item.data[i].data, function (x) {
+                return x.x;
+            });
+            var max = Plot.Maths.max(item.data[i].data, function (x) {
+                return x.x;
+            });
+            var lowerQuartile = Plot.Maths.lowerQuartile(item.data[i].data);
+            var upperQuartile = Plot.Maths.upperQuartile(item.data[i].data);
+            var median = Plot.Maths.median(item.data[i].data);
+            top = totalTop + singlePlotHeight * i;
+            bottom = totalTop + singlePlotHeight * (i + 1);
+            var y = top + singlePlotHeight / 2 - 10;
+            item.context.beginPath();
+            console.log(top + effectiveHeight / 2 - 10);
+            drawLineAt(item, left + effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.lineTo(left + effectiveWidth * lowerQuartile / totalMax, y);
+            drawLineAt(item, left + effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.moveTo(left + effectiveWidth * upperQuartile / totalMax, y);
+            item.context.lineTo(left + effectiveWidth * max / totalMax, y);
+            drawLineAt(item, left + effectiveWidth * max / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.rect(left + effectiveWidth * lowerQuartile / totalMax, y - singlePlotHeight * 2 / 5, effectiveWidth * (upperQuartile - lowerQuartile) / totalMax, singlePlotHeight * 4 / 5);
+            item.context.stroke();
+        }
     }
     var defaultOptions = {
         margin: 10
@@ -222,7 +240,7 @@ var Plot;
     Plot.xData = xData;
     function toXData(items) {
         if (Object.prototype.toString.call(items) === "[object Array]") {
-            if (items.length = 0) {
+            if (items.length == 0) {
                 return [];
             }
             var isWorking = true;
@@ -326,6 +344,48 @@ var Plot;
             return maxNum;
         }
         Maths.min = min;
+        function median(items) {
+            items.sort(function (a, b) {
+                return a.x - b.x;
+            });
+            var half = Math.floor(items.length / 2);
+            if (items.length % 2) {
+                return items[half].x;
+            }
+            else {
+                return (items[half - 1].x + items[half].x) / 2.0;
+            }
+            return 0;
+        }
+        Maths.median = median;
+        function lowerQuartile(items) {
+            items.sort(function (a, b) {
+                return a.x - b.x;
+            });
+            var quarter = Math.floor(items.length / 4);
+            if (items.length % 4) {
+                return items[quarter].x;
+            }
+            else {
+                return (items[quarter - 1].x + items[quarter].x) / 2.0;
+            }
+            return 0;
+        }
+        Maths.lowerQuartile = lowerQuartile;
+        function upperQuartile(items) {
+            items.sort(function (a, b) {
+                return a.x - b.x;
+            });
+            var threeQuarter = Math.floor(items.length * 3 / 4);
+            if (items.length % 4) {
+                return items[threeQuarter].x;
+            }
+            else {
+                return (items[threeQuarter - 1].x + items[threeQuarter].x) / 2.0;
+            }
+            return 0;
+        }
+        Maths.upperQuartile = upperQuartile;
     })(Maths = Plot.Maths || (Plot.Maths = {}));
 })(Plot || (Plot = {}));
 /// <reference path="plot.ts" />
