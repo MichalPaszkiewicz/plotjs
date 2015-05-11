@@ -81,6 +81,7 @@
             }
 
             if (isMobile) {
+                this.animateNum = 1;
                 this.draw(this);
             }
             else{

@@ -45,6 +45,7 @@ var Plot;
                 animationFrame();
             };
             if (isMobile) {
+                this.animateNum = 1;
                 this.draw(this);
             }
             else {
@@ -192,6 +193,21 @@ var Plot;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
+    var KVCDatum = (function () {
+        function KVCDatum(key, value, colour) {
+            this.key = key;
+            this.value = value;
+            this.colour = colour;
+            if (colour == null) {
+                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
+            }
+        }
+        return KVCDatum;
+    })();
+    Plot.KVCDatum = KVCDatum;
+})(Plot || (Plot = {}));
+var Plot;
+(function (Plot) {
     var xData = (function () {
         // values have to be of the form {x: 3423, y: 12312}
         function xData(values, colour) {
@@ -283,21 +299,6 @@ var Plot;
         }
     }
     Plot.toXYData = toXYData;
-})(Plot || (Plot = {}));
-var Plot;
-(function (Plot) {
-    var KVCDatum = (function () {
-        function KVCDatum(key, value, colour) {
-            this.key = key;
-            this.value = value;
-            this.colour = colour;
-            if (colour == null) {
-                this.colour = "hsl(" + ~~(Math.random() * 360) + ",99%,60%)";
-            }
-        }
-        return KVCDatum;
-    })();
-    Plot.KVCDatum = KVCDatum;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
