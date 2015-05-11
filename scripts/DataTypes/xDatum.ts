@@ -24,7 +24,7 @@
 
         if (Object.prototype.toString.call(items) === "[object Array]") {
 
-            if (items.length = 0) {
+            if (items.length == 0) {
                 return [];
             }
 
