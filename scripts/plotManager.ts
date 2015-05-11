@@ -22,7 +22,7 @@ module Plot {
             window.onresize = function () {
                 if (window.innerHeight != wndw.h || window.innerWidth != wndw.w) {
                     for (var i = 0; i < self.plots.length; i++) {
-                        self.plots[i].draw(self.plots[i]);
+                        self.plots[i].draw();
                     }
                     wndw.h = window.innerHeight;
                     wndw.w = window.innerWidth;

@@ -1,56 +1,6 @@
 ﻿/// <reference path="plot.ts" />
 module Plot {
 
-    function draw(item: Bar) {
-        item.baseDraw();
-
-        var max = Maths.max(item.data, function (x) { return x.value; });
-
-        var left = item.options.margin;
-        var right = item.canvas.width - item.options.margin;
-        var top = item.options.margin;
-        var bottom = item.canvas.height - item.options.margin;
-        var effectiveHeight = bottom - top;
-        var effectiveWidth = right - left;
-
-        //draw axis
-        item.context.beginPath();
-        item.context.moveTo(left, top);
-        item.context.lineTo(left + 5, top + 10);
-        item.context.lineTo(left - 5, top + 10);
-        item.context.lineTo(left, top);
-        item.context.lineTo(left, bottom);
-        item.context.lineTo(right, bottom);
-        item.context.strokeStyle = "black";
-        item.context.stroke();
-
-        var barWidth = effectiveWidth / item.data.length;
-        var tempLeft = left;
-
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.beginPath();
-            item.context.fillStyle = item.data[i].colour;
-            item.context.fillRect(tempLeft, bottom, barWidth, - item.animateNum * effectiveHeight * item.data[i].value / max);
-            item.context.closePath();
-
-            tempLeft += barWidth;
-        }
-
-        tempLeft = left;
-
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.beginPath();
-            item.context.textAlign = "center";
-            item.context.textBaseline = "middle";
-            var isOverHalf = (item.data[i].value) > max / 2;
-            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10);
-            item.context.fillStyle = "black";
-            item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
-
-            tempLeft += barWidth;
-        }
-    }
-
     var defaultOptions = {
 
         margin: 10
@@ -68,9 +18,60 @@ module Plot {
                 this.data.push(new KVCDatum(prop, data[prop]));
             }
 
-            super(id, options, draw, defaultOptions);
 
             var me = this;
+
+            this.draw = function () {
+                me.baseDraw();
+
+                var max = Maths.max(me.data, function (x) { return x.value; });
+
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var top = me.options.margin;
+                var bottom = me.canvas.height - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+
+                //draw axis
+                me.context.beginPath();
+                me.context.moveTo(left, top);
+                me.context.lineTo(left + 5, top + 10);
+                me.context.lineTo(left - 5, top + 10);
+                me.context.lineTo(left, top);
+                me.context.lineTo(left, bottom);
+                me.context.lineTo(right, bottom);
+                me.context.strokeStyle = "black";
+                me.context.stroke();
+
+                var barWidth = effectiveWidth / me.data.length;
+                var tempLeft = left;
+
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.beginPath();
+                    me.context.fillStyle = me.data[i].colour;
+                    me.context.fillRect(tempLeft, bottom, barWidth, - me.animateNum * effectiveHeight * me.data[i].value / max);
+                    me.context.closePath();
+
+                    tempLeft += barWidth;
+                }
+
+                tempLeft = left;
+
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.beginPath();
+                    me.context.textAlign = "center";
+                    me.context.textBaseline = "middle";
+                    var isOverHalf = (me.data[i].value) > max / 2;
+                    var txtY = bottom - me.animateNum * effectiveHeight * me.data[i].value / max + (isOverHalf ? 10 : -10);
+                    me.context.fillStyle = "black";
+                    me.context.fillText(me.data[i].key, tempLeft + barWidth / 2, txtY);
+
+                    tempLeft += barWidth;
+                }
+            }
+
+            super(id, options, defaultOptions);
 
         }
     }
