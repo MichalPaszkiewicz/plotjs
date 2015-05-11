@@ -74,6 +74,11 @@ footer {
 .graph-box {
     width: 60%;
     margin: auto;
-    min-width: 400px;
     height: 400px;
+}
+
+@media (max-width: 600px) {
+  .graph-box{
+      width: 100%;
+  }
 }
