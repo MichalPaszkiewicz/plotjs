@@ -33,16 +33,21 @@ module Plot {
             item.context.fillRect(tempLeft, bottom, barWidth, - item.animateNum * effectiveHeight * item.data[i].value / max);
             item.context.closePath();
 
+            tempLeft += barWidth;
+        }
+
+        tempLeft = left;
+
+        for (var i = 0; i < item.data.length; i++) {
             item.context.beginPath();
             item.context.textAlign = "center";
             item.context.textBaseline = "middle";
             var isOverHalf = (item.data[i].value) > max / 2;
-            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10 );
+            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10);
             item.context.fillStyle = "black";
             item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
 
             tempLeft += barWidth;
-
         }
     }
 

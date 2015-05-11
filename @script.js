@@ -93,6 +93,10 @@ var Plot;
             item.context.fillStyle = item.data[i].colour;
             item.context.fillRect(tempLeft, bottom, barWidth, -item.animateNum * effectiveHeight * item.data[i].value / max);
             item.context.closePath();
+            tempLeft += barWidth;
+        }
+        tempLeft = left;
+        for (var i = 0; i < item.data.length; i++) {
             item.context.beginPath();
             item.context.textAlign = "center";
             item.context.textBaseline = "middle";
