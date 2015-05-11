@@ -173,13 +173,13 @@ var Plot;
             bottom = totalTop + singlePlotHeight * (i + 1);
             var y = top + singlePlotHeight / 2 - 10;
             item.context.beginPath();
-            drawLineAt(item, left + effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.lineTo(left + effectiveWidth * lowerQuartile / totalMax, y);
-            drawLineAt(item, left + effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.moveTo(left + effectiveWidth * upperQuartile / totalMax, y);
-            item.context.lineTo(left + effectiveWidth * max / totalMax, y);
-            drawLineAt(item, left + effectiveWidth * max / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.rect(left + effectiveWidth * lowerQuartile / totalMax, y - singlePlotHeight * 2 / 5, effectiveWidth * (upperQuartile - lowerQuartile) / totalMax, singlePlotHeight * 4 / 5);
+            drawLineAt(item, left + item.animateNum * effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.lineTo(left + item.animateNum * effectiveWidth * lowerQuartile / totalMax, y);
+            drawLineAt(item, left + item.animateNum * effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.moveTo(left + item.animateNum * effectiveWidth * upperQuartile / totalMax, y);
+            item.context.lineTo(left + item.animateNum * effectiveWidth * max / totalMax, y);
+            drawLineAt(item, left + item.animateNum * effectiveWidth * max / totalMax, y, singlePlotHeight * 4 / 5);
+            item.context.rect(left + item.animateNum * effectiveWidth * lowerQuartile / totalMax, y - singlePlotHeight * 2 / 5, item.animateNum * effectiveWidth * (upperQuartile - lowerQuartile) / totalMax, singlePlotHeight * 4 / 5);
             item.context.stroke();
         }
     }
