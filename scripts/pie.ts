@@ -30,7 +30,7 @@ module Plot {
 
             item.context.beginPath();
             item.context.fillStyle = "black";
-            item.context.font = (Math.min(minLength, minLength / 2 * addAngle) / ( item.data[i].key.length )) + "px Arial";
+            item.context.font = Math.min(Math.min(minLength * 3 / 2, minLength * addAngle) / ( item.data[i].key.length ), 100) + "px Arial";
             item.context.textBaseline = "middle";
             item.context.textAlign = "center";
 

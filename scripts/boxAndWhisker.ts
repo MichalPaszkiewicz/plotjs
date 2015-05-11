@@ -50,7 +50,6 @@
             var y = top + singlePlotHeight / 2 - 10;
 
             item.context.beginPath();
-            console.log(top + effectiveHeight / 2 - 10);
             drawLineAt(item, left + effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
             item.context.lineTo(left + effectiveWidth * lowerQuartile / totalMax, y);
             drawLineAt(item, left + effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
