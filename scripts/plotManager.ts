@@ -1,6 +1,8 @@
 ﻿/// <reference path="plot.ts" />
 module Plot {
 
+    var wndw = { h: window.innerHeight, w: window.innerWidth };
+
     class PlotManager{
 
         plots: BasePlot[];
@@ -18,8 +20,12 @@ module Plot {
             }
 
             window.onresize = function () {
-                for (var i = 0; i < self.plots.length; i++) {
-                    self.plots[i].draw(self.plots[i]);
+                if (window.innerHeight != wndw.h || window.innerWidth != wndw.w) {
+                    for (var i = 0; i < self.plots.length; i++) {
+                        self.plots[i].draw(self.plots[i]);
+                    }
+                    wndw.h = window.innerHeight;
+                    wndw.w = window.innerWidth;
                 }
             }
         }

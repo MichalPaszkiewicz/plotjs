@@ -72,8 +72,8 @@ footer {
         }
 
 .graph-box {
-    width: 50%;
+    width: 60%;
+    margin: auto;
     min-width: 400px;
     height: 400px;
-    float: left;
 }
