@@ -18,7 +18,7 @@
         baseDraw: () => void;
 
         options: any;
-
+        
         animate: () => void;
 
         animateNum: number;

@@ -440,6 +440,7 @@ var Plot;
 /// <reference path="plot.ts" />
 var Plot;
 (function (Plot) {
+    var wndw = { h: window.innerHeight, w: window.innerWidth };
     var PlotManager = (function () {
         function PlotManager() {
             this.plots = [];
@@ -448,8 +449,12 @@ var Plot;
                 self.plots.push(item);
             };
             window.onresize = function () {
-                for (var i = 0; i < self.plots.length; i++) {
-                    self.plots[i].draw(self.plots[i]);
+                if (window.innerHeight != wndw.h || window.innerWidth != wndw.w) {
+                    for (var i = 0; i < self.plots.length; i++) {
+                        self.plots[i].draw(self.plots[i]);
+                    }
+                    wndw.h = window.innerHeight;
+                    wndw.w = window.innerWidth;
                 }
             };
         }
@@ -557,4 +562,4 @@ var Plot;
     })(Plot.BasePlot);
     Plot.Scatter = Scatter;
 })(Plot || (Plot = {}));
-//# sourceMappingURL=@script.js.map
+//# sourceMappingURL=plotjs.js.map
