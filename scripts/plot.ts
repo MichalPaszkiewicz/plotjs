@@ -1,5 +1,7 @@
 ﻿module Plot {
 
+    var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/).test(navigator.userAgent);
+
     var defaultOptions = {
 
 
@@ -78,7 +80,12 @@
 
             }
 
-            this.animate();
+            if (isMobile) {
+                this.draw(this);
+            }
+            else{
+                this.animate();
+            }
         }
     }
 
