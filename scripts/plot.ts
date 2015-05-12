@@ -7,7 +7,7 @@
 
     }
 
-    export class BasePlot {
+    export class BasePlot{
 
         canvas: HTMLCanvasElement;
 
@@ -68,8 +68,10 @@
             }
 
             var moveEvent: EventListener = function (e) {
-                me.draw();
-                me.hover();
+                if (me.hover != null) {
+                    me.draw();
+                    me.hover();
+                }
             };
 
             this.canvas.addEventListener("mouseover", function () {
