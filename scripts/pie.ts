@@ -63,8 +63,6 @@ module Plot {
             }
 
             this.hover = function (e: MouseEvent) {
-                me.baseHover();
-
                 var cx = me.canvas.width / 2;
                 var cy = me.canvas.height / 2;
 
@@ -76,6 +74,8 @@ module Plot {
                 var radialDist = Math.sqrt(x * x + y * y);
 
                 if (radialDist < radius) {
+                    me.baseHover();
+                    
                     me.context.strokeStyle = "gray";
                     me.context.beginPath();
                     me.context.lineWidth = 3;
@@ -110,7 +110,17 @@ module Plot {
                             me.context.fill();
                             me.context.stroke();
 
-                            var fontSize = Math.min(cx * 2 / (me.data[i].key.length + 2 + (me.data[i].value + "").length), 80);
+                            var fontSize = Math.min(3 * radius / (2 * (me.data[i].key.length + 2 + (me.data[i].value + "").length)), 80);
+
+                            me.context.beginPath();
+                            me.context.arc(cx, cy, radius / 2, 0, 2 * Math.PI);
+                            me.context.fillStyle = me.data[i].colour;
+                            //me.context.stroke();
+                            me.context.fill();
+
+                            me.context.beginPath();
+                            me.context.arc(cx, cy, radius / 2,(oldAngle + addAngle), oldAngle);
+                            me.context.stroke();
 
                             me.context.font = fontSize + "px Arial";
                             me.context.fillStyle = "black";
