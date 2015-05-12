@@ -15,9 +15,9 @@
 
         draw: () => void;
 
-        hover: () => void;
-
         baseDraw: () => void;
+
+        hover: () => void;
 
         baseHover: () => void;
 
@@ -67,7 +67,9 @@
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             }
 
-            this.canvas.onmspointerhover = this.hover;
+            this.canvas.addEventListener("mouseover", function () {
+                me.hover();
+            });
 
             plotManager.addPlot(me);
 
