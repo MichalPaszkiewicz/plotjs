@@ -63,8 +63,10 @@
             }
 
             this.baseHover = function () {
-                me.context.fillStyle = "rgba(230,230,230,0.8)";
-                me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
+                if (me.hover != null) {
+                    me.context.fillStyle = "rgba(250,250,250,0.8)";
+                    me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
+                }
             }
 
             var moveEvent: EventListener = function (e) {
