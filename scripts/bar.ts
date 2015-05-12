@@ -71,9 +71,9 @@ module Plot {
                 }
             }
 
-            this.hover = function () {
-                me.baseHover();
-            }
+            //this.hover = function () {
+            //    me.baseHover();
+            //}
 
             super(id, options, defaultOptions);
 

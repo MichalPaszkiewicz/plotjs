@@ -29,8 +29,10 @@ var Plot;
                 me.canvas.width = me.canvas.parentElement.offsetWidth;
             };
             this.baseHover = function () {
-                me.context.fillStyle = "rgba(230,230,230,0.8)";
-                me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
+                if (me.hover != null) {
+                    me.context.fillStyle = "rgba(250,250,250,0.8)";
+                    me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
+                }
             };
             var moveEvent = function (e) {
                 if (me.hover != null) {
@@ -134,9 +136,9 @@ var Plot;
                     tempLeft += barWidth;
                 }
             };
-            this.hover = function () {
-                me.baseHover();
-            };
+            //this.hover = function () {
+            //    me.baseHover();
+            //}
             _super.call(this, id, options, defaultOptions);
         }
         return Bar;
@@ -211,9 +213,9 @@ var Plot;
                     me.context.stroke();
                 }
             };
-            this.hover = function () {
-                me.baseHover();
-            };
+            //this.hover = function () {
+            //    me.baseHover();
+            //}
             _super.call(this, id, options, defaultOptions);
         }
         return BoxAndWhisker;
@@ -626,9 +628,9 @@ var Plot;
                     }
                 }
             };
-            this.hover = function () {
-                me.baseHover();
-            };
+            //this.hover = function () {
+            //    me.baseHover();
+            //}
             _super.call(this, id, options, defaultOptions);
         }
         return Scatter;
