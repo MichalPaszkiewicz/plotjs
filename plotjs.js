@@ -32,7 +32,9 @@ var Plot;
                 me.context.fillStyle = "rgba(0,0,0,0.2)";
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             };
-            this.canvas.onmspointerhover = this.hover;
+            this.canvas.addEventListener("mouseover", function () {
+                me.hover();
+            });
             Plot.plotManager.addPlot(me);
             this.animate = function () {
                 me.animateNum = 0;
@@ -438,6 +440,9 @@ var Plot;
                     me.context.textAlign = "center";
                     me.context.fillText(me.data[i].key, x + 2 * minLength / 3 * Math.cos(oldAngle + addAngle / 2), y + 2 * minLength / 3 * Math.sin(oldAngle + addAngle / 2), minLength);
                 }
+            };
+            this.hover = function () {
+                me.baseHover();
             };
             _super.call(this, id, options, defaultOptions);
         }
