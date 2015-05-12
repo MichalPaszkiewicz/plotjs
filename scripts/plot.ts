@@ -22,7 +22,7 @@
         baseHover: () => void;
 
         options: any;
-        
+
         animate: () => void;
 
         animateNum: number;
@@ -67,8 +67,18 @@
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             }
 
-            this.canvas.addEventListener("mouseover", function () {
+            var moveEvent: EventListener = function (e) {
+                me.draw();
                 me.hover();
+            };
+
+            this.canvas.addEventListener("mouseover", function () {
+                me.canvas.addEventListener("mousemove", moveEvent);
+            });
+
+            this.canvas.addEventListener("mouseout", function () {
+                me.canvas.removeEventListener("mousemove", moveEvent);
+                me.draw();
             });
 
             plotManager.addPlot(me);
@@ -95,7 +105,7 @@
                 this.animateNum = 1;
                 this.draw();
             }
-            else{
+            else {
                 this.animate();
             }
         }

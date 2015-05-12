@@ -32,8 +32,16 @@ var Plot;
                 me.context.fillStyle = "rgba(0,0,0,0.2)";
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             };
-            this.canvas.addEventListener("mouseover", function () {
+            var moveEvent = function (e) {
+                me.draw();
                 me.hover();
+            };
+            this.canvas.addEventListener("mouseover", function () {
+                me.canvas.addEventListener("mousemove", moveEvent);
+            });
+            this.canvas.addEventListener("mouseout", function () {
+                me.canvas.removeEventListener("mousemove", moveEvent);
+                me.draw();
             });
             Plot.plotManager.addPlot(me);
             this.animate = function () {
