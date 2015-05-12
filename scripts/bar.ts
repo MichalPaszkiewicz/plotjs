@@ -70,7 +70,7 @@ module Plot {
                     tempLeft += barWidth;
                 }
             }
-
+             
             //this.hover = function () {
             //    me.baseHover();
             //}

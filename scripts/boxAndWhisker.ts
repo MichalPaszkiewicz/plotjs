@@ -78,7 +78,7 @@
                     me.context.stroke();
                 }
             }
-
+             
             //this.hover = function () {
             //    me.baseHover();
             //}
