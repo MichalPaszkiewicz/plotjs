@@ -3,7 +3,7 @@ var Plot;
     var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/).test(navigator.userAgent);
     var defaultOptions = {};
     var BasePlot = (function () {
-        function BasePlot(id, options, sketcher, specificDefaults) {
+        function BasePlot(id, options, specificDefaults) {
             this.animateNum = 0;
             var tempOptions = options;
             if (options == null || options == undefined) {
@@ -28,7 +28,11 @@ var Plot;
                 me.canvas.height = me.canvas.parentElement.offsetHeight;
                 me.canvas.width = me.canvas.parentElement.offsetWidth;
             };
-            this.draw = sketcher;
+            this.baseHover = function () {
+                me.context.fillStyle = "rgba(0,0,0,0.2)";
+                me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
+            };
+            this.canvas.onmspointerhover = this.hover;
             Plot.plotManager.addPlot(me);
             this.animate = function () {
                 me.animateNum = 0;
@@ -36,17 +40,17 @@ var Plot;
                     me.animateNum += 0.05;
                     if (me.animateNum >= 1) {
                         me.animateNum = 1;
-                        me.draw(me);
+                        me.draw();
                         return;
                     }
-                    me.draw(me);
+                    me.draw();
                     window.requestAnimationFrame(animationFrame);
                 }
                 animationFrame();
             };
             if (isMobile) {
                 this.animateNum = 1;
-                this.draw(this);
+                this.draw();
             }
             else {
                 this.animate();
@@ -65,48 +69,6 @@ var __extends = this.__extends || function (d, b) {
 /// <reference path="plot.ts" />
 var Plot;
 (function (Plot) {
-    function draw(item) {
-        item.baseDraw();
-        var max = Plot.Maths.max(item.data, function (x) {
-            return x.value;
-        });
-        var left = item.options.margin;
-        var right = item.canvas.width - item.options.margin;
-        var top = item.options.margin;
-        var bottom = item.canvas.height - item.options.margin;
-        var effectiveHeight = bottom - top;
-        var effectiveWidth = right - left;
-        //draw axis
-        item.context.beginPath();
-        item.context.moveTo(left, top);
-        item.context.lineTo(left + 5, top + 10);
-        item.context.lineTo(left - 5, top + 10);
-        item.context.lineTo(left, top);
-        item.context.lineTo(left, bottom);
-        item.context.lineTo(right, bottom);
-        item.context.strokeStyle = "black";
-        item.context.stroke();
-        var barWidth = effectiveWidth / item.data.length;
-        var tempLeft = left;
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.beginPath();
-            item.context.fillStyle = item.data[i].colour;
-            item.context.fillRect(tempLeft, bottom, barWidth, -item.animateNum * effectiveHeight * item.data[i].value / max);
-            item.context.closePath();
-            tempLeft += barWidth;
-        }
-        tempLeft = left;
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.beginPath();
-            item.context.textAlign = "center";
-            item.context.textBaseline = "middle";
-            var isOverHalf = (item.data[i].value) > max / 2;
-            var txtY = bottom - item.animateNum * effectiveHeight * item.data[i].value / max + (isOverHalf ? 10 : -10);
-            item.context.fillStyle = "black";
-            item.context.fillText(item.data[i].key, tempLeft + barWidth / 2, txtY);
-            tempLeft += barWidth;
-        }
-    }
     var defaultOptions = {
         margin: 10
     };
@@ -117,8 +79,50 @@ var Plot;
             for (var prop in data) {
                 this.data.push(new Plot.KVCDatum(prop, data[prop]));
             }
-            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
+            this.draw = function () {
+                me.baseDraw();
+                var max = Plot.Maths.max(me.data, function (x) {
+                    return x.value;
+                });
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var top = me.options.margin;
+                var bottom = me.canvas.height - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+                //draw axis
+                me.context.beginPath();
+                me.context.moveTo(left, top);
+                me.context.lineTo(left + 5, top + 10);
+                me.context.lineTo(left - 5, top + 10);
+                me.context.lineTo(left, top);
+                me.context.lineTo(left, bottom);
+                me.context.lineTo(right, bottom);
+                me.context.strokeStyle = "black";
+                me.context.stroke();
+                var barWidth = effectiveWidth / me.data.length;
+                var tempLeft = left;
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.beginPath();
+                    me.context.fillStyle = me.data[i].colour;
+                    me.context.fillRect(tempLeft, bottom, barWidth, -me.animateNum * effectiveHeight * me.data[i].value / max);
+                    me.context.closePath();
+                    tempLeft += barWidth;
+                }
+                tempLeft = left;
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.beginPath();
+                    me.context.textAlign = "center";
+                    me.context.textBaseline = "middle";
+                    var isOverHalf = (me.data[i].value) > max / 2;
+                    var txtY = bottom - me.animateNum * effectiveHeight * me.data[i].value / max + (isOverHalf ? 10 : -10);
+                    me.context.fillStyle = "black";
+                    me.context.fillText(me.data[i].key, tempLeft + barWidth / 2, txtY);
+                    tempLeft += barWidth;
+                }
+            };
+            _super.call(this, id, options, defaultOptions);
         }
         return Bar;
     })(Plot.BasePlot);
@@ -132,57 +136,6 @@ var Plot;
         item.context.moveTo(x, y - height / 2);
         item.context.lineTo(x, y);
     }
-    function draw(item) {
-        item.baseDraw();
-        var max = Plot.Maths.max(item.data, function (x) {
-            return x.value;
-        });
-        var totalTop = item.options.margin;
-        var totalBottom = item.canvas.height - item.options.margin;
-        var top = totalTop;
-        var bottom = totalBottom;
-        var left = item.options.margin;
-        var right = item.canvas.width - item.options.margin;
-        var effectiveHeight = bottom - top;
-        var effectiveWidth = right - left;
-        var totalMax = Plot.Maths.max(item.data, function (x) {
-            return Plot.Maths.max(x.data, function (y) {
-                return y.x;
-            });
-        });
-        item.context.beginPath();
-        item.context.moveTo(left, bottom);
-        item.context.lineTo(right, bottom);
-        item.context.lineTo(right - 10, bottom - 5);
-        item.context.lineTo(right - 10, bottom + 5);
-        item.context.lineTo(right, bottom);
-        item.context.stroke();
-        var singlePlotHeight = effectiveHeight / item.data.length;
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.strokeStyle = item.data[i].colour;
-            var min = Plot.Maths.min(item.data[i].data, function (x) {
-                return x.x;
-            });
-            var max = Plot.Maths.max(item.data[i].data, function (x) {
-                return x.x;
-            });
-            var lowerQuartile = Plot.Maths.lowerQuartile(item.data[i].data);
-            var upperQuartile = Plot.Maths.upperQuartile(item.data[i].data);
-            var median = Plot.Maths.median(item.data[i].data);
-            top = totalTop + singlePlotHeight * i;
-            bottom = totalTop + singlePlotHeight * (i + 1);
-            var y = top + singlePlotHeight / 2 - 10;
-            item.context.beginPath();
-            drawLineAt(item, left + item.animateNum * effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.lineTo(left + item.animateNum * effectiveWidth * lowerQuartile / totalMax, y);
-            drawLineAt(item, left + item.animateNum * effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.moveTo(left + item.animateNum * effectiveWidth * upperQuartile / totalMax, y);
-            item.context.lineTo(left + item.animateNum * effectiveWidth * max / totalMax, y);
-            drawLineAt(item, left + item.animateNum * effectiveWidth * max / totalMax, y, singlePlotHeight * 4 / 5);
-            item.context.rect(left + item.animateNum * effectiveWidth * lowerQuartile / totalMax, y - singlePlotHeight * 2 / 5, item.animateNum * effectiveWidth * (upperQuartile - lowerQuartile) / totalMax, singlePlotHeight * 4 / 5);
-            item.context.stroke();
-        }
-    }
     var defaultOptions = {
         margin: 10
     };
@@ -191,8 +144,59 @@ var Plot;
         function BoxAndWhisker(id, data, options) {
             this.data = [];
             this.data = Plot.toXData(data);
-            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
+            this.draw = function () {
+                me.baseDraw();
+                var max = Plot.Maths.max(me.data, function (x) {
+                    return x.value;
+                });
+                var totalTop = me.options.margin;
+                var totalBottom = me.canvas.height - me.options.margin;
+                var top = totalTop;
+                var bottom = totalBottom;
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+                var totalMax = Plot.Maths.max(me.data, function (x) {
+                    return Plot.Maths.max(x.data, function (y) {
+                        return y.x;
+                    });
+                });
+                me.context.beginPath();
+                me.context.moveTo(left, bottom);
+                me.context.lineTo(right, bottom);
+                me.context.lineTo(right - 10, bottom - 5);
+                me.context.lineTo(right - 10, bottom + 5);
+                me.context.lineTo(right, bottom);
+                me.context.stroke();
+                var singlePlotHeight = effectiveHeight / me.data.length;
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.strokeStyle = me.data[i].colour;
+                    var min = Plot.Maths.min(me.data[i].data, function (x) {
+                        return x.x;
+                    });
+                    var max = Plot.Maths.max(me.data[i].data, function (x) {
+                        return x.x;
+                    });
+                    var lowerQuartile = Plot.Maths.lowerQuartile(me.data[i].data);
+                    var upperQuartile = Plot.Maths.upperQuartile(me.data[i].data);
+                    var median = Plot.Maths.median(me.data[i].data);
+                    top = totalTop + singlePlotHeight * i;
+                    bottom = totalTop + singlePlotHeight * (i + 1);
+                    var y = top + singlePlotHeight / 2 - 10;
+                    me.context.beginPath();
+                    drawLineAt(me, left + me.animateNum * effectiveWidth * min / totalMax, y, singlePlotHeight * 4 / 5);
+                    me.context.lineTo(left + me.animateNum * effectiveWidth * lowerQuartile / totalMax, y);
+                    drawLineAt(me, left + me.animateNum * effectiveWidth * median / totalMax, y, singlePlotHeight * 4 / 5);
+                    me.context.moveTo(left + me.animateNum * effectiveWidth * upperQuartile / totalMax, y);
+                    me.context.lineTo(left + me.animateNum * effectiveWidth * max / totalMax, y);
+                    drawLineAt(me, left + me.animateNum * effectiveWidth * max / totalMax, y, singlePlotHeight * 4 / 5);
+                    me.context.rect(left + me.animateNum * effectiveWidth * lowerQuartile / totalMax, y - singlePlotHeight * 2 / 5, me.animateNum * effectiveWidth * (upperQuartile - lowerQuartile) / totalMax, singlePlotHeight * 4 / 5);
+                    me.context.stroke();
+                }
+            };
+            _super.call(this, id, options, defaultOptions);
         }
         return BoxAndWhisker;
     })(Plot.BasePlot);
@@ -394,35 +398,11 @@ var Plot;
 /// <reference path="plot.ts" />
 var Plot;
 (function (Plot) {
-    function draw(item) {
-        item.baseDraw();
-        var total = 0;
-        for (var i = 0; i < item.data.length; i++) {
-            total += item.data[i].value;
-        }
-        var x = item.canvas.width / 2;
-        var y = item.canvas.height / 2;
-        var minLength = Math.min(x, y);
-        item.context.arc(x, y, minLength, 0, Math.PI * 2);
-        item.context.stroke();
-        var tempAngle = 0;
-        for (var i = 0; i < item.data.length; i++) {
-            var oldAngle = tempAngle;
-            var addAngle = item.animateNum * Math.PI * 2 * item.data[i].value / total;
-            item.context.beginPath();
-            item.context.moveTo(x, y);
-            item.context.arc(x, y, minLength, tempAngle, tempAngle = tempAngle + addAngle);
-            item.context.fillStyle = item.data[i].colour;
-            item.context.fill();
-            item.context.beginPath();
-            item.context.fillStyle = "black";
-            item.context.font = Math.min(Math.min(minLength * 3 / 2, minLength * addAngle) / (item.data[i].key.length), 100) + "px Arial";
-            item.context.textBaseline = "middle";
-            item.context.textAlign = "center";
-            item.context.fillText(item.data[i].key, x + 2 * minLength / 3 * Math.cos(oldAngle + addAngle / 2), y + 2 * minLength / 3 * Math.sin(oldAngle + addAngle / 2), minLength);
-        }
+    function hover(item) {
     }
-    var defaultOptions = {};
+    var defaultOptions = {
+        margin: 10
+    };
     var Pie = (function (_super) {
         __extends(Pie, _super);
         function Pie(id, data, options) {
@@ -430,8 +410,36 @@ var Plot;
             for (var prop in data) {
                 this.data.push(new Plot.KVCDatum(prop, data[prop]));
             }
-            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
+            this.draw = function () {
+                me.baseDraw();
+                var total = 0;
+                for (var i = 0; i < me.data.length; i++) {
+                    total += me.data[i].value;
+                }
+                var x = me.canvas.width / 2;
+                var y = me.canvas.height / 2;
+                var minLength = Math.min(x - me.options.margin, y - me.options.margin);
+                me.context.arc(x, y, minLength, 0, Math.PI * 2);
+                me.context.stroke();
+                var tempAngle = 0;
+                for (var i = 0; i < me.data.length; i++) {
+                    var oldAngle = tempAngle;
+                    var addAngle = me.animateNum * Math.PI * 2 * me.data[i].value / total;
+                    me.context.beginPath();
+                    me.context.moveTo(x, y);
+                    me.context.arc(x, y, minLength, tempAngle, tempAngle = tempAngle + addAngle);
+                    me.context.fillStyle = me.data[i].colour;
+                    me.context.fill();
+                    me.context.beginPath();
+                    me.context.fillStyle = "black";
+                    me.context.font = Math.min(Math.min(minLength * 3 / 2, minLength * addAngle) / (me.data[i].key.length), 100) + "px Arial";
+                    me.context.textBaseline = "middle";
+                    me.context.textAlign = "center";
+                    me.context.fillText(me.data[i].key, x + 2 * minLength / 3 * Math.cos(oldAngle + addAngle / 2), y + 2 * minLength / 3 * Math.sin(oldAngle + addAngle / 2), minLength);
+                }
+            };
+            _super.call(this, id, options, defaultOptions);
         }
         return Pie;
     })(Plot.BasePlot);
@@ -451,7 +459,7 @@ var Plot;
             window.onresize = function () {
                 if (window.innerHeight != wndw.h || window.innerWidth != wndw.w) {
                     for (var i = 0; i < self.plots.length; i++) {
-                        self.plots[i].draw(self.plots[i]);
+                        self.plots[i].draw();
                     }
                     wndw.h = window.innerHeight;
                     wndw.w = window.innerWidth;
@@ -464,86 +472,6 @@ var Plot;
 })(Plot || (Plot = {}));
 var Plot;
 (function (Plot) {
-    function draw(item) {
-        item.baseDraw();
-        var left = item.options.margin;
-        var right = item.canvas.width - item.options.margin;
-        var top = item.options.margin;
-        var bottom = item.canvas.height - item.options.margin;
-        var effectiveHeight = bottom - top;
-        var effectiveWidth = right - left;
-        var maxX = Plot.Maths.max(item.data, function (x) {
-            return Plot.Maths.max(x.data, function (y) {
-                return y.x;
-            });
-        });
-        var maxY = Plot.Maths.max(item.data, function (x) {
-            return Plot.Maths.max(x.data, function (y) {
-                return y.y;
-            });
-        });
-        var minValX = Plot.Maths.min(item.data, function (x) {
-            return Plot.Maths.min(x.data, function (y) {
-                return y.x;
-            });
-        });
-        var minValY = Plot.Maths.min(item.data, function (x) {
-            return Plot.Maths.min(x.data, function (y) {
-                return y.y;
-            });
-        });
-        var minX = Math.min(0, minValX);
-        var minY = Math.min(0, minValY);
-        var yAxisPosition = 0;
-        if (minX < 0) {
-            yAxisPosition = effectiveWidth * (-minX) / (maxX - minX);
-        }
-        var xAxisPosition = 0;
-        if (minY < 0) {
-            xAxisPosition = effectiveHeight * (-minY) / (maxY - minY);
-        }
-        //draw axis
-        item.context.beginPath();
-        item.context.moveTo(left + yAxisPosition, top);
-        item.context.lineTo(left + yAxisPosition + 5, top + 10);
-        item.context.lineTo(left + yAxisPosition - 5, top + 10);
-        item.context.lineTo(left + yAxisPosition, top);
-        item.context.lineTo(left + yAxisPosition, bottom);
-        item.context.moveTo(left, bottom - xAxisPosition);
-        item.context.lineTo(right, bottom - xAxisPosition);
-        item.context.lineTo(right - 10, bottom - xAxisPosition - 5);
-        item.context.lineTo(right - 10, bottom - xAxisPosition + 5);
-        item.context.lineTo(right, bottom - xAxisPosition);
-        item.context.strokeStyle = "black";
-        item.context.stroke();
-        for (var i = 0; i < item.data.length; i++) {
-            item.context.strokeStyle = item.data[i].colour;
-            var nums = Math.round(item.data[i].data.length * item.animateNum / 1);
-            for (var j = 0; j < nums; j++) {
-                item.context.beginPath();
-                var lengthX = (item.data[i].data[j].x - minX) / (maxX - minX);
-                var tempX = left + effectiveWidth * lengthX;
-                var heightY = (item.data[i].data[j].y - minY) / (maxY - minY);
-                var tempY = bottom - effectiveHeight * heightY;
-                item.context.moveTo(tempX - 3, tempY);
-                item.context.lineTo(tempX + 3, tempY);
-                item.context.moveTo(tempX, tempY - 3);
-                item.context.lineTo(tempX, tempY + 3);
-                item.context.stroke();
-            }
-        }
-        for (var c = 0; c < item.curves.length; c++) {
-            var steps = 3000;
-            for (var i = minX; i < maxX - (maxX - minX) * (1 - item.animateNum); i += (maxX - minX) / steps) {
-                var lengthX = (i - minX) / (maxX - minX);
-                var tempX = left + effectiveWidth * lengthX;
-                var heightY = (item.curves[c].formula(i) - minY) / (maxY - minY);
-                var tempY = bottom - effectiveHeight * heightY;
-                item.context.fillStyle = item.curves[c].colour;
-                item.context.fillRect(tempX, tempY, 1, 1);
-            }
-        }
-    }
     var defaultOptions = {
         margin: 10
     };
@@ -552,11 +480,91 @@ var Plot;
         function Scatter(id, data, options) {
             this.curves = [];
             this.data = Plot.toXYData(data);
-            _super.call(this, id, options, draw, defaultOptions);
             var me = this;
             this.addCurve = function (formula, colour) {
                 me.curves.push(new Plot.Curve(formula, colour));
             };
+            this.draw = function () {
+                me.baseDraw();
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var top = me.options.margin;
+                var bottom = me.canvas.height - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+                var maxX = Plot.Maths.max(me.data, function (x) {
+                    return Plot.Maths.max(x.data, function (y) {
+                        return y.x;
+                    });
+                });
+                var maxY = Plot.Maths.max(me.data, function (x) {
+                    return Plot.Maths.max(x.data, function (y) {
+                        return y.y;
+                    });
+                });
+                var minValX = Plot.Maths.min(me.data, function (x) {
+                    return Plot.Maths.min(x.data, function (y) {
+                        return y.x;
+                    });
+                });
+                var minValY = Plot.Maths.min(me.data, function (x) {
+                    return Plot.Maths.min(x.data, function (y) {
+                        return y.y;
+                    });
+                });
+                var minX = Math.min(0, minValX);
+                var minY = Math.min(0, minValY);
+                var yAxisPosition = 0;
+                if (minX < 0) {
+                    yAxisPosition = effectiveWidth * (-minX) / (maxX - minX);
+                }
+                var xAxisPosition = 0;
+                if (minY < 0) {
+                    xAxisPosition = effectiveHeight * (-minY) / (maxY - minY);
+                }
+                //draw axis
+                me.context.beginPath();
+                me.context.moveTo(left + yAxisPosition, top);
+                me.context.lineTo(left + yAxisPosition + 5, top + 10);
+                me.context.lineTo(left + yAxisPosition - 5, top + 10);
+                me.context.lineTo(left + yAxisPosition, top);
+                me.context.lineTo(left + yAxisPosition, bottom);
+                me.context.moveTo(left, bottom - xAxisPosition);
+                me.context.lineTo(right, bottom - xAxisPosition);
+                me.context.lineTo(right - 10, bottom - xAxisPosition - 5);
+                me.context.lineTo(right - 10, bottom - xAxisPosition + 5);
+                me.context.lineTo(right, bottom - xAxisPosition);
+                me.context.strokeStyle = "black";
+                me.context.stroke();
+                for (var i = 0; i < me.data.length; i++) {
+                    me.context.strokeStyle = me.data[i].colour;
+                    var nums = Math.round(me.data[i].data.length * me.animateNum / 1);
+                    for (var j = 0; j < nums; j++) {
+                        me.context.beginPath();
+                        var lengthX = (me.data[i].data[j].x - minX) / (maxX - minX);
+                        var tempX = left + effectiveWidth * lengthX;
+                        var heightY = (me.data[i].data[j].y - minY) / (maxY - minY);
+                        var tempY = bottom - effectiveHeight * heightY;
+                        me.context.moveTo(tempX - 3, tempY);
+                        me.context.lineTo(tempX + 3, tempY);
+                        me.context.moveTo(tempX, tempY - 3);
+                        me.context.lineTo(tempX, tempY + 3);
+                        me.context.stroke();
+                    }
+                }
+                for (var c = 0; c < me.curves.length; c++) {
+                    var steps = 3000;
+                    for (var i = minX; i < maxX - (maxX - minX) * (1 - me.animateNum); i += (maxX - minX) / steps) {
+                        var lengthX = (i - minX) / (maxX - minX);
+                        var tempX = left + effectiveWidth * lengthX;
+                        var heightY = (me.curves[c].formula(i) - minY) / (maxY - minY);
+                        var tempY = bottom - effectiveHeight * heightY;
+                        me.context.fillStyle = me.curves[c].colour;
+                        me.context.fillRect(tempX, tempY, 1, 1);
+                    }
+                }
+            };
+            _super.call(this, id, options, defaultOptions);
         }
         return Scatter;
     })(Plot.BasePlot);
