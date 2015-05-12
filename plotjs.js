@@ -33,8 +33,10 @@ var Plot;
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             };
             var moveEvent = function (e) {
-                me.draw();
-                me.hover();
+                if (me.hover != null) {
+                    me.draw();
+                    me.hover();
+                }
             };
             this.canvas.addEventListener("mouseover", function () {
                 me.canvas.addEventListener("mousemove", moveEvent);

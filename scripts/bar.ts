@@ -7,7 +7,7 @@ module Plot {
 
     }
 
-    export class Bar extends BasePlot implements Ianimateable {
+    export class Bar extends BasePlot implements Ianimateable{
 
         data: KVCDatum[];
 
