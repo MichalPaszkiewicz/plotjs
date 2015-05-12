@@ -460,7 +460,6 @@ var Plot;
                 }
             };
             this.hover = function (e) {
-                me.baseHover();
                 var cx = me.canvas.width / 2;
                 var cy = me.canvas.height / 2;
                 var x = (e.clientX - me.canvas.offsetLeft) - cx;
@@ -468,6 +467,7 @@ var Plot;
                 var radius = Math.min(cy - me.options.margin, cx - me.options.margin);
                 var radialDist = Math.sqrt(x * x + y * y);
                 if (radialDist < radius) {
+                    me.baseHover();
                     me.context.strokeStyle = "gray";
                     me.context.beginPath();
                     me.context.lineWidth = 3;
@@ -495,7 +495,15 @@ var Plot;
                             me.context.fillStyle = me.data[i].colour;
                             me.context.fill();
                             me.context.stroke();
-                            var fontSize = Math.min(cx * 2 / (me.data[i].key.length + 2 + (me.data[i].value + "").length), 80);
+                            var fontSize = Math.min(3 * radius / (2 * (me.data[i].key.length + 2 + (me.data[i].value + "").length)), 80);
+                            me.context.beginPath();
+                            me.context.arc(cx, cy, radius / 2, 0, 2 * Math.PI);
+                            me.context.fillStyle = me.data[i].colour;
+                            //me.context.stroke();
+                            me.context.fill();
+                            me.context.beginPath();
+                            me.context.arc(cx, cy, radius / 2, (oldAngle + addAngle), oldAngle);
+                            me.context.stroke();
                             me.context.font = fontSize + "px Arial";
                             me.context.fillStyle = "black";
                             me.context.fillText(me.data[i].key + ": " + me.data[i].value, cx, cy);
