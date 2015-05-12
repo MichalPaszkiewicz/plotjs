@@ -8,3 +8,4 @@ C:\Users\michal.paszkiewicz\Documents\github\plotjs\bin\plotJS.dll
 C:\Users\michal.paszkiewicz\Documents\github\plotjs\bin\plotJS.pdb
 C:\Users\michal.paszkiewicz\Documents\github\plotjs\obj\Debug\plotJS.dll
 C:\Users\michal.paszkiewicz\Documents\github\plotjs\obj\Debug\plotJS.pdb
+C:\Users\michal.paszkiewicz\Documents\github\plotjs\obj\Debug\plotJS.csprojResolveAssemblyReference.cache
