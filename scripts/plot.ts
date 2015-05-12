@@ -17,7 +17,7 @@
 
         baseDraw: () => void;
 
-        hover: () => void;
+        hover: (e) => void;
 
         baseHover: () => void;
 
@@ -63,14 +63,14 @@
             }
 
             this.baseHover = function () {
-                me.context.fillStyle = "rgba(0,0,0,0.2)";
+                me.context.fillStyle = "rgba(230,230,230,0.8)";
                 me.context.fillRect(0, 0, me.canvas.width, me.canvas.height);
             }
 
             var moveEvent: EventListener = function (e) {
                 if (me.hover != null) {
                     me.draw();
-                    me.hover();
+                    me.hover(e);
                 }
             };
 

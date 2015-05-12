@@ -40,7 +40,6 @@
     <TypeScriptCompile Include="scripts\DataTypes\xyDatum.ts" />
     <TypeScriptCompile Include="scripts\interfaces\Ianimateable.ts" />
     <TypeScriptCompile Include="scripts\DataTypes\KVCDatum.ts" />
-    <TypeScriptCompile Include="scripts\interfaces\Ihoverable.ts" />
     <TypeScriptCompile Include="scripts\line.ts" />
     <TypeScriptCompile Include="scripts\maths.ts" />
     <TypeScriptCompile Include="scripts\pie.ts" />
