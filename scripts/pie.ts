@@ -110,8 +110,6 @@ module Plot {
                             me.context.moveTo(cx, cy);
                             me.context.arc(cx, cy, minLength, oldAngle,(oldAngle + addAngle));
                             me.context.lineTo(cx, cy);
-                            //me.context.fillStyle = me.data[i].colour;
-                            //me.context.fill();
                             me.context.stroke();
 
                             //draw centre circle
