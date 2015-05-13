@@ -136,9 +136,54 @@ var Plot;
                     tempLeft += barWidth;
                 }
             };
-            //this.hover = function () {
-            //    me.baseHover();
-            //}
+            this.hover = function (e) {
+                var mx = (e.clientX - me.canvas.offsetLeft);
+                var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
+                var max = Plot.Maths.max(me.data, function (x) {
+                    return x.value;
+                });
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var top = me.options.margin;
+                var bottom = me.canvas.height - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+                var barWidth = effectiveWidth / me.data.length;
+                var tempLeft = left;
+                for (var i = 0; i < me.data.length; i++) {
+                    if (mx > tempLeft && mx < tempLeft + barWidth) {
+                        me.context.beginPath();
+                        me.context.strokeStyle = "gray";
+                        me.context.lineWidth = 3;
+                        me.context.rect(tempLeft, bottom, barWidth, -me.animateNum * effectiveHeight * me.data[i].value / max);
+                        me.context.stroke();
+                        var fontSize = 16;
+                        var w = (me.data[i].key.length + (me.data[i].value + "").length + 2) * 10;
+                        me.context.beginPath();
+                        me.context.lineWidth = 1;
+                        me.context.fillStyle = "rgba(50,50,50,0.3)";
+                        me.context.rect(mx - w / 2 + 3, my - 37, w, 30);
+                        me.context.fill();
+                        me.context.strokeStyle = "black";
+                        me.context.beginPath();
+                        me.context.fillStyle = "rgba(255,255,255,0.85)";
+                        me.context.rect(mx - w / 2, my - 40, w, 30);
+                        me.context.fill();
+                        me.context.stroke();
+                        me.context.beginPath();
+                        me.context.font = 16 + "px Arial";
+                        me.context.fillStyle = "black";
+                        me.context.fillText(me.data[i].key + ": " + me.data[i].value, mx, my - 25);
+                    }
+                    else {
+                        me.context.beginPath();
+                        me.context.rect(tempLeft, bottom, barWidth, -me.animateNum * effectiveHeight * me.data[i].value / max);
+                        me.context.fillStyle = "rgba(255,255,255,0.2)";
+                        me.context.fill();
+                    }
+                    tempLeft += barWidth;
+                }
+            };
             _super.call(this, id, options, defaultOptions);
         }
         return Bar;
@@ -495,8 +540,6 @@ var Plot;
                             me.context.moveTo(cx, cy);
                             me.context.arc(cx, cy, minLength, oldAngle, (oldAngle + addAngle));
                             me.context.lineTo(cx, cy);
-                            //me.context.fillStyle = me.data[i].colour;
-                            //me.context.fill();
                             me.context.stroke();
                             //draw centre circle
                             me.context.beginPath();
