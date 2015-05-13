@@ -462,12 +462,14 @@ var Plot;
             this.hover = function (e) {
                 var cx = me.canvas.width / 2;
                 var cy = me.canvas.height / 2;
-                var x = (e.clientX - me.canvas.offsetLeft) - cx;
-                var y = (e.clientY - me.canvas.offsetTop + document.body.scrollTop) - cy;
+                var mx = (e.clientX - me.canvas.offsetLeft);
+                var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
+                var x = mx - cx;
+                var y = my - cy;
                 var radius = Math.min(cy - me.options.margin, cx - me.options.margin);
                 var radialDist = Math.sqrt(x * x + y * y);
                 if (radialDist < radius) {
-                    me.baseHover();
+                    // pie border
                     me.context.strokeStyle = "gray";
                     me.context.beginPath();
                     me.context.lineWidth = 3;
@@ -488,25 +490,36 @@ var Plot;
                         var addAngle = me.animateNum * Math.PI * 2 * me.data[i].value / total;
                         tempAngle = tempAngle + addAngle;
                         if (mouseAngle > oldAngle && mouseAngle < oldAngle + addAngle) {
+                            //sector border
                             me.context.beginPath();
                             me.context.moveTo(cx, cy);
                             me.context.arc(cx, cy, minLength, oldAngle, (oldAngle + addAngle));
                             me.context.lineTo(cx, cy);
+                            //me.context.fillStyle = me.data[i].colour;
+                            //me.context.fill();
+                            me.context.stroke();
+                            //draw centre circle
+                            me.context.beginPath();
+                            me.context.arc(cx, cy, radius / 4, 0, 2 * Math.PI);
                             me.context.fillStyle = me.data[i].colour;
                             me.context.fill();
-                            me.context.stroke();
-                            var fontSize = Math.min(3 * radius / (2 * (me.data[i].key.length + 2 + (me.data[i].value + "").length)), 80);
                             me.context.beginPath();
-                            me.context.arc(cx, cy, radius / 2, 0, 2 * Math.PI);
-                            me.context.fillStyle = me.data[i].colour;
-                            //me.context.stroke();
+                            me.context.arc(cx, cy, radius / 4, (oldAngle + addAngle), oldAngle);
+                            me.context.stroke();
+                            //write text
+                            var fontSize = 16;
+                            var w = (me.data[i].key.length + (me.data[i].value + "").length + 2) * 10;
+                            me.context.beginPath();
+                            me.context.lineWidth = 1;
+                            me.context.strokeStyle = "black";
+                            me.context.fillStyle = "rgba(255,255,255,0.85)";
+                            me.context.rect(mx - w / 2, my - 40, w, 30);
                             me.context.fill();
-                            me.context.beginPath();
-                            me.context.arc(cx, cy, radius / 2, (oldAngle + addAngle), oldAngle);
                             me.context.stroke();
-                            me.context.font = fontSize + "px Arial";
+                            me.context.beginPath();
+                            me.context.font = 16 + "px Arial";
                             me.context.fillStyle = "black";
-                            me.context.fillText(me.data[i].key + ": " + me.data[i].value, cx, cy);
+                            me.context.fillText(me.data[i].key + ": " + me.data[i].value, mx, my - 25);
                         }
                     }
                 }
