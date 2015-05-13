@@ -125,7 +125,7 @@ module Plot {
 
                             //write text
                             var fontSize = 16;
-                            var w = (me.data[i].key.length + (me.data[i].value + "").length + 2) * 10;
+                            var w = (me.data[i].key.length + (me.data[i].value + "").length + 8) * 10;
 
                             me.context.beginPath();
                             me.context.lineWidth = 1;
@@ -138,7 +138,7 @@ module Plot {
                             me.context.beginPath();
                             me.context.font = 16 + "px Arial";
                             me.context.fillStyle = "black";
-                            me.context.fillText(me.data[i].key + ": " + me.data[i].value, mx, my - 25);
+                            me.context.fillText(me.data[i].key + ": " + me.data[i].value + " (" + (Math.round(me.data[i].value/total * 1000) / 10) + "%)", mx, my - 25);
                         }
                     }
                 }
