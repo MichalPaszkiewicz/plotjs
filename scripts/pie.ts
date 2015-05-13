@@ -129,7 +129,13 @@ module Plot {
 
                             me.context.beginPath();
                             me.context.lineWidth = 1;
+
+                            me.context.fillStyle = "rgba(50,50,50,0.3)";
+                            me.context.rect(mx - w / 2 + 3, my - 37, w, 30);
+                            me.context.fill();
+
                             me.context.strokeStyle = "black";
+                            me.context.beginPath();
                             me.context.fillStyle = "rgba(255,255,255,0.85)";
                             me.context.rect(mx - w / 2, my - 40, w, 30);
                             me.context.fill();
