@@ -90,12 +90,14 @@ module Plot {
                 for (var i = 0; i < me.data.length; i++) {
 
                     if (mx > tempLeft && mx < tempLeft + barWidth) {
+                        // border line
                         me.context.beginPath();
                         me.context.strokeStyle = "gray";
                         me.context.lineWidth = 3;
                         me.context.rect(tempLeft, bottom, barWidth, - me.animateNum * effectiveHeight * me.data[i].value / max);
                         me.context.stroke();
 
+                        // tooltip text
                         var fontSize = 16;
                         var w = (me.data[i].key.length + (me.data[i].value + "").length + 2) * 10;
 

@@ -1,7 +1,7 @@
 ﻿module Plot {
 
     function drawLineAt(item: BoxAndWhisker, x, y, height) {
-        item.context.moveTo(x,y + height / 2);
+        item.context.moveTo(x, y + height / 2);
         item.context.lineTo(x, y);
         item.context.moveTo(x, y - height / 2);
         item.context.lineTo(x, y);
@@ -78,10 +78,59 @@
                     me.context.stroke();
                 }
             }
-             
-            //this.hover = function () {
-            //    me.baseHover();
-            //}
+
+            this.hover = function (e: MouseEvent) {
+
+                var mx = (e.clientX - me.canvas.offsetLeft);
+                var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
+
+                var max = Maths.max(me.data, function (x) { return x.value; });
+
+                var left = me.options.margin;
+                var right = me.canvas.width - me.options.margin;
+                var top = me.options.margin;
+                var bottom = me.canvas.height - me.options.margin;
+                var effectiveHeight = bottom - top;
+                var effectiveWidth = right - left;
+
+                var singlePlotHeight = effectiveHeight / me.data.length;
+
+                for (var i = 0; i < me.data.length; i++) {
+                    if (my > singlePlotHeight * i && my < singlePlotHeight * (i + 1)) {
+                        // tooltip text
+                        var fontSize = 16;
+
+                        var txt = "Median: " + Maths.median(me.data[i].data) + "  ||  Range: [ "
+                            + Maths.min(me.data[i].data, function (x: xDatum) { return x.x; }) + " : "
+                            + Maths.max(me.data[i].data, function (x: xDatum) { return x.x; }) + " ]";
+
+                        var w = (txt.length) * 10;
+
+
+                        me.context.beginPath();
+                        me.context.lineWidth = 1;
+
+                        me.context.fillStyle = "rgba(50,50,50,0.3)";
+                        me.context.rect(mx - w / 2 + 3, my - 37, w, 30);
+                        me.context.fill();
+
+                        me.context.strokeStyle = "black";
+                        me.context.beginPath();
+                        me.context.fillStyle = "rgba(255,255,255,0.85)";
+                        me.context.rect(mx - w / 2, my - 40, w, 30);
+                        me.context.fill();
+                        me.context.stroke();
+
+
+                        me.context.beginPath();
+                        me.context.font = 16 + "px Arial";
+                        me.context.fillStyle = "black";
+                        me.context.textAlign = "center";
+                        me.context.fillText(txt, mx, my - 20);
+                    }
+                }
+
+            }
 
             super(id, options, defaultOptions);
 
