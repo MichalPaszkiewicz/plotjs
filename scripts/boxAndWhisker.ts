@@ -107,31 +107,39 @@
                         var w = (txt.length) * 10;
 
                         var txtY = -40;
+                        var txtX = mx;
 
                         if (my + txtY < 0) {
                             txtY = -txtY;
+                        }
+
+                        if (txtX - w / 2 < 0) {
+                            txtX = w / 2;
+                        }
+
+                        if (txtX + w / 2 > me.canvas.width) {
+                            txtX = me.canvas.width - w / 2;
                         }
 
                         me.context.beginPath();
                         me.context.lineWidth = 1;
 
                         me.context.fillStyle = "rgba(50,50,50,0.3)";
-                        me.context.rect(mx - w / 2 + 3, my + txtY + 3, w, 30);
+                        me.context.rect(txtX - w / 2 + 3, my + txtY + 3, w, 30);
                         me.context.fill();
 
                         me.context.strokeStyle = "black";
                         me.context.beginPath();
                         me.context.fillStyle = "rgba(255,255,255,0.85)";
-                        me.context.rect(mx - w / 2, my + txtY, w, 30);
+                        me.context.rect(txtX - w / 2, my + txtY, w, 30);
                         me.context.fill();
                         me.context.stroke();
-
 
                         me.context.beginPath();
                         me.context.font = 16 + "px Arial";
                         me.context.fillStyle = "black";
                         me.context.textAlign = "center";
-                        me.context.fillText(txt, mx, my + txtY + 20);
+                        me.context.fillText(txt, txtX, my + txtY + 20);
                     }
                 }
 
