@@ -162,7 +162,6 @@
                 // circle the item
                 me.context.beginPath();
                 me.context.arc(setX, setY, 10, 0, 2 * Math.PI);
-                console.log(tempX + " , " +  tempY);
                 me.context.strokeStyle = me.data[i].colour;
                 me.context.stroke();
 
