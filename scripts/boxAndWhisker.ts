@@ -43,9 +43,11 @@
                     return Maths.max(x.data, function (y: xDatum) { return y.x; });
                 });
 
+                // draw axis
                 me.context.beginPath();
                 me.context.moveTo(left, bottom);
-                me.context.lineTo(right, bottom);
+                me.context.lineTo(right - 10, bottom);
+                me.context.moveTo(right, bottom);
                 me.context.lineTo(right - 10, bottom - 5);
                 me.context.lineTo(right - 10, bottom + 5);
                 me.context.lineTo(right, bottom);

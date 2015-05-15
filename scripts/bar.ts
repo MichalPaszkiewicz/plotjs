@@ -39,6 +39,7 @@ module Plot {
                 me.context.lineTo(left + 5, top + 10);
                 me.context.lineTo(left - 5, top + 10);
                 me.context.lineTo(left, top);
+                me.context.moveTo(left, top + 10);
                 me.context.lineTo(left, bottom);
                 me.context.lineTo(right, bottom);
                 me.context.strokeStyle = "black";

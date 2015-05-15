@@ -62,10 +62,12 @@
                 me.context.lineTo(left + yAxisPosition + 5, top + 10);
                 me.context.lineTo(left + yAxisPosition - 5, top + 10);
                 me.context.lineTo(left + yAxisPosition, top);
+                me.context.moveTo(left + yAxisPosition, top + 10);
                 me.context.lineTo(left + yAxisPosition, bottom);
 
                 me.context.moveTo(left, bottom - xAxisPosition);
-                me.context.lineTo(right, bottom - xAxisPosition);
+                me.context.lineTo(right - 10, bottom - xAxisPosition);
+                me.context.moveTo(right, bottom - xAxisPosition);
                 me.context.lineTo(right - 10, bottom - xAxisPosition - 5);
                 me.context.lineTo(right - 10, bottom - xAxisPosition + 5);
                 me.context.lineTo(right, bottom - xAxisPosition);
