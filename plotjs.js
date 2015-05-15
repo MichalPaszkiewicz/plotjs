@@ -286,9 +286,19 @@ var Plot;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
+                var totalTop = me.options.margin;
                 var singlePlotHeight = effectiveHeight / me.data.length;
                 for (var i = 0; i < me.data.length; i++) {
                     if (my > singlePlotHeight * i && my < singlePlotHeight * (i + 1)) {
+                        // highlight item
+                        top = totalTop + singlePlotHeight * i;
+                        var y = top - 10;
+                        me.context.beginPath();
+                        me.context.fillStyle = me.data[i].colour;
+                        me.context.globalAlpha = 0.1;
+                        me.context.rect(left, y, effectiveWidth, singlePlotHeight);
+                        me.context.fill();
+                        me.context.globalAlpha = 1;
                         // tooltip text
                         var fontSize = 16;
                         var txt = "Median: " + Plot.Maths.median(me.data[i].data) + "  ||  Range: [ " + Plot.Maths.min(me.data[i].data, function (x) {
