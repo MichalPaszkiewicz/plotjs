@@ -74,6 +74,47 @@
                 me.context.strokeStyle = "black";
                 me.context.stroke();
 
+                //draw axis text
+                //x
+                var xSplits = Math.floor(effectiveWidth / 50);
+                var xLabels = Maths.getSplits(minX, maxX, xSplits);
+
+                for (var i = 0; i < xLabels.length; i++) {
+                    if (xLabels[i] != 0 && xLabels[i] <= maxX) {
+                        var tempLabelX = left + effectiveWidth * ((xLabels[i] - minX) / (maxX - minX));
+                        var tempLabelY = bottom - xAxisPosition;
+
+                        me.context.beginPath();
+                        me.context.moveTo(tempLabelX, tempLabelY);
+                        me.context.lineTo(tempLabelX, tempLabelY + 5);
+                        me.context.stroke();
+
+                        me.context.textAlign = "center";
+                        me.context.fillText(xLabels[i].toPrecision(3), tempLabelX, tempLabelY + 15);
+                    }
+                }
+
+                //y
+                var ySplits = Math.floor(me.canvas.height / 50);
+                var yLabels = Maths.getSplits(minY, maxY, ySplits);
+
+                for (var i = 0; i < yLabels.length; i++) {
+                    if (yLabels[i] != 0 && yLabels[i] <= maxY) {
+                        var tempLabelX = left + yAxisPosition;
+                        var tempLabelY = bottom - effectiveHeight * ((yLabels[i] - minY) / (maxY - minY));
+
+                        me.context.beginPath();
+                        me.context.moveTo(tempLabelX, tempLabelY);
+                        me.context.lineTo(tempLabelX - 5, tempLabelY);
+                        me.context.stroke();
+
+                        me.context.textAlign = "right";
+                        me.context.textBaseline = "middle";
+                        me.context.fillText(yLabels[i].toPrecision(3), tempLabelX - 10, tempLabelY);
+                    }
+                }
+
+
                 for (var i = 0; i < me.data.length; i++) {
                     me.context.strokeStyle = me.data[i].colour;
 
@@ -147,7 +188,7 @@
                         var yDist = tempY - my;
 
                         var pointDistance = Math.sqrt(xDist * xDist + yDist * yDist);
-                        if (pointDistance <= nearestDataPoint.pointDistance) {           
+                        if (pointDistance <= nearestDataPoint.pointDistance) {
                             nearestDataPoint.data = i;
                             nearestDataPoint.datum = j;
                             nearestDataPoint.pointDistance = pointDistance;
@@ -188,6 +229,8 @@
                     txtX = me.canvas.width - w / 2;
                 }
 
+                me.context.textBaseline = "middle";
+
                 me.context.beginPath();
                 me.context.lineWidth = 1;
 
@@ -206,7 +249,7 @@
                 me.context.font = 16 + "px Arial";
                 me.context.fillStyle = "black";
                 me.context.textAlign = "center";
-                me.context.fillText(txt, txtX, my + txtY + 20);
+                me.context.fillText(txt, txtX, my + txtY + 15);
 
             }
             super(id, options, defaultOptions);
