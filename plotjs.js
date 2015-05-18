@@ -534,6 +534,27 @@ var Plot;
             return 0;
         }
         Maths.upperQuartile = upperQuartile;
+        function getSplits(minNum, maxNum, splits) {
+            if (splits == 0) {
+                return [];
+            }
+            var absMin = Math.min(minNum, 0);
+            var totalSize = maxNum - absMin;
+            var splitSize = parseFloat((totalSize).toPrecision(1)) / splits;
+            var results = [];
+            for (var i = absMin; i < maxNum; i += splitSize) {
+                results.push(Math.ceil(i / splitSize) * splitSize);
+            }
+            return results;
+        }
+        Maths.getSplits = getSplits;
+        function isEqualToAccurate(num1, num2) {
+            if (num1 == num2) {
+                return true;
+            }
+            return Math.max(num1, num2) - Math.min(num1, num2) < 0.00000001;
+        }
+        Maths.isEqualToAccurate = isEqualToAccurate;
     })(Maths = Plot.Maths || (Plot.Maths = {}));
 })(Plot || (Plot = {}));
 /// <reference path="plot.ts" />
@@ -757,6 +778,38 @@ var Plot;
                 me.context.lineTo(right + 10, bottom - xAxisPosition);
                 me.context.strokeStyle = "black";
                 me.context.stroke();
+                //draw axis text
+                //x
+                var xSplits = Math.floor(effectiveWidth / 50);
+                var xLabels = Plot.Maths.getSplits(minX, maxX, xSplits);
+                for (var i = 0; i < xLabels.length; i++) {
+                    if (xLabels[i] != 0 && xLabels[i] <= maxX) {
+                        var tempLabelX = left + effectiveWidth * ((xLabels[i] - minX) / (maxX - minX));
+                        var tempLabelY = bottom - xAxisPosition;
+                        me.context.beginPath();
+                        me.context.moveTo(tempLabelX, tempLabelY);
+                        me.context.lineTo(tempLabelX, tempLabelY + 5);
+                        me.context.stroke();
+                        me.context.textAlign = "center";
+                        me.context.fillText(xLabels[i].toPrecision(3), tempLabelX, tempLabelY + 15);
+                    }
+                }
+                //y
+                var ySplits = Math.floor(me.canvas.height / 50);
+                var yLabels = Plot.Maths.getSplits(minY, maxY, ySplits);
+                for (var i = 0; i < yLabels.length; i++) {
+                    if (yLabels[i] != 0 && yLabels[i] <= maxY) {
+                        var tempLabelX = left + yAxisPosition;
+                        var tempLabelY = bottom - effectiveHeight * ((yLabels[i] - minY) / (maxY - minY));
+                        me.context.beginPath();
+                        me.context.moveTo(tempLabelX, tempLabelY);
+                        me.context.lineTo(tempLabelX - 5, tempLabelY);
+                        me.context.stroke();
+                        me.context.textAlign = "right";
+                        me.context.textBaseline = "middle";
+                        me.context.fillText(yLabels[i].toPrecision(3), tempLabelX - 10, tempLabelY);
+                    }
+                }
                 for (var i = 0; i < me.data.length; i++) {
                     me.context.strokeStyle = me.data[i].colour;
                     var nums = Math.round(me.data[i].data.length * me.animateNum / 1);
@@ -859,6 +912,7 @@ var Plot;
                 if (txtX + w / 2 > me.canvas.width) {
                     txtX = me.canvas.width - w / 2;
                 }
+                me.context.textBaseline = "middle";
                 me.context.beginPath();
                 me.context.lineWidth = 1;
                 me.context.fillStyle = "rgba(50,50,50,0.3)";
@@ -874,7 +928,7 @@ var Plot;
                 me.context.font = 16 + "px Arial";
                 me.context.fillStyle = "black";
                 me.context.textAlign = "center";
-                me.context.fillText(txt, txtX, my + txtY + 20);
+                me.context.fillText(txt, txtX, my + txtY + 15);
             };
             _super.call(this, id, options, defaultOptions);
         }

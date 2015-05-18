@@ -81,4 +81,33 @@
 
         return 0;
     }
+
+    export function getSplits(minNum, maxNum, splits): number[] {
+        if (splits == 0) {
+            return [];
+        }
+
+        var absMin = Math.min(minNum, 0);
+
+        var totalSize = maxNum - absMin;
+
+        var splitSize = parseFloat((totalSize).toPrecision(1)) / splits;
+
+        var results = [];
+
+        for (var i = absMin; i < maxNum; i += splitSize) {
+            results.push(Math.ceil(i / splitSize) * splitSize);
+        }
+
+        return results;
+    }
+
+    export function isEqualToAccurate(num1: number, num2: number): Boolean {
+
+        if (num1 == num2) {
+            return true;
+        }
+
+        return Math.max(num1, num2) - Math.min(num1, num2) < 0.00000001;
+    }
 }
