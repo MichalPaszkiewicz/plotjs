@@ -32,8 +32,8 @@
                 me.baseDraw();
 
                 var left = me.options.margin;
-                var right = me.canvas.width - me.options.margin;
-                var top = me.options.margin;
+                var right = me.canvas.width - me.options.margin - 10;
+                var top = me.options.margin + 10;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
@@ -58,19 +58,19 @@
 
                 //draw axis
                 me.context.beginPath();
+                me.context.moveTo(left + yAxisPosition, top - 10);
+                me.context.lineTo(left + yAxisPosition + 5, top);
+                me.context.lineTo(left + yAxisPosition - 5, top);
+                me.context.lineTo(left + yAxisPosition, top - 10);
                 me.context.moveTo(left + yAxisPosition, top);
-                me.context.lineTo(left + yAxisPosition + 5, top + 10);
-                me.context.lineTo(left + yAxisPosition - 5, top + 10);
-                me.context.lineTo(left + yAxisPosition, top);
-                me.context.moveTo(left + yAxisPosition, top + 10);
                 me.context.lineTo(left + yAxisPosition, bottom);
 
                 me.context.moveTo(left, bottom - xAxisPosition);
-                me.context.lineTo(right - 10, bottom - xAxisPosition);
-                me.context.moveTo(right, bottom - xAxisPosition);
-                me.context.lineTo(right - 10, bottom - xAxisPosition - 5);
-                me.context.lineTo(right - 10, bottom - xAxisPosition + 5);
                 me.context.lineTo(right, bottom - xAxisPosition);
+                me.context.moveTo(right + 10, bottom - xAxisPosition);
+                me.context.lineTo(right, bottom - xAxisPosition - 5);
+                me.context.lineTo(right, bottom - xAxisPosition + 5);
+                me.context.lineTo(right + 10, bottom - xAxisPosition);
                 me.context.strokeStyle = "black";
                 me.context.stroke();
 
@@ -115,8 +115,8 @@
                 var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
 
                 var left = me.options.margin;
-                var right = me.canvas.width - me.options.margin;
-                var top = me.options.margin;
+                var right = me.canvas.width - me.options.margin - 10;
+                var top = me.options.margin + 10;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;

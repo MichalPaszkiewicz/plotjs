@@ -35,7 +35,7 @@
                 var top = totalTop;
                 var bottom = totalBottom;
                 var left = me.options.margin;
-                var right = me.canvas.width - me.options.margin;
+                var right = me.canvas.width - me.options.margin - 10;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
 
@@ -46,11 +46,11 @@
                 // draw axis
                 me.context.beginPath();
                 me.context.moveTo(left, bottom);
-                me.context.lineTo(right - 10, bottom);
-                me.context.moveTo(right, bottom);
-                me.context.lineTo(right - 10, bottom - 5);
-                me.context.lineTo(right - 10, bottom + 5);
                 me.context.lineTo(right, bottom);
+                me.context.moveTo(right + 10, bottom);
+                me.context.lineTo(right, bottom - 5);
+                me.context.lineTo(right, bottom + 5);
+                me.context.lineTo(right + 10, bottom);
                 me.context.stroke();
 
                 var singlePlotHeight = effectiveHeight / me.data.length;

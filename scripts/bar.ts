@@ -28,18 +28,18 @@ module Plot {
 
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin;
-                var top = me.options.margin;
+                var top = me.options.margin + 10;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
 
                 //draw axis
                 me.context.beginPath();
+                me.context.moveTo(left, top - 10);
+                me.context.lineTo(left + 5, top);
+                me.context.lineTo(left - 5, top);
+                me.context.lineTo(left, top - 10);
                 me.context.moveTo(left, top);
-                me.context.lineTo(left + 5, top + 10);
-                me.context.lineTo(left - 5, top + 10);
-                me.context.lineTo(left, top);
-                me.context.moveTo(left, top + 10);
                 me.context.lineTo(left, bottom);
                 me.context.lineTo(right, bottom);
                 me.context.strokeStyle = "black";
@@ -80,7 +80,7 @@ module Plot {
 
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin;
-                var top = me.options.margin;
+                var top = me.options.margin + 10;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
