@@ -93,7 +93,6 @@ for (var i = -200; i < 200; i++) {
 }
 var scatter = new Plot.Scatter("my-scatter", xyData, options);
 scatter.addCurve(function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) }, "orange");
-scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");         
 </code></pre>
         </div>
         <h1 id="whisker">Box and whisker diagram</h1>
@@ -147,7 +146,6 @@ var boxAndWhisker = new Plot.BoxAndWhisker("my-box-and-whisker", xData, options)
         var scatter = new Plot.Scatter("my-scatter", xyData, options);
 
         scatter.addCurve(function (i) { return 2 * Math.sin(i / 20) - Math.cos(i / 8) }, "orange");
-        scatter.addCurve(function (i) { return Math.sin(i / 4); }, "blue");
 
         var xData = [{ values: [], colour: "red" }, { values: [], colour: "blue" }, { values: [], colour: "green" }];
 
