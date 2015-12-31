@@ -12,7 +12,7 @@ Allows creation of pie, bar, scatter and line charts.
 
 first, add the following script to the top of your html page:
 
-<script src="http://www.michalpaszkiewicz.co.uk/plotjs/plotjs.js"></script>
+`<script src="http://www.michalpaszkiewicz.co.uk/plotjs/plotjs.js"></script>`
 
 Then add your par chart js code from one of the following samples:
 
