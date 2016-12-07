@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>TypeScript HTML App</title>
+    <title>Plot js - for awesome plotting</title>
     <link rel="stylesheet" href="app.css" type="text/css" />
     <link href='http://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
@@ -72,7 +72,11 @@ var data = {
     "lots of yellow frogs with jumpers": 32,
     y: 81
 }
-var options = {};
+var options = {
+	colour: {
+		bob:"gray"
+	}
+};
 //pie chart
 var pie = new Plot.Pie("my-pie", data, options);
 //bar chart
@@ -129,7 +133,11 @@ var boxAndWhisker = new Plot.BoxAndWhisker("my-box-and-whisker", xData, options)
             y: 81
         }
 
-        var options = {};
+        var options = {
+			colour: {
+				bob:"gray"
+			}
+		};
 
         var pie = new Plot.Pie("my-pie", data, options);
         var bar = new Plot.Bar("my-bar", data, options);

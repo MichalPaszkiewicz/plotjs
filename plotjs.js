@@ -91,7 +91,11 @@ var Plot;
         function Bar(id, data, options) {
             this.data = [];
             for (var prop in data) {
-                this.data.push(new Plot.KVCDatum(prop, data[prop]));
+				var itemColour = null;
+				if(options.colour){
+					itemColour = options.colour[prop]
+				}
+                this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
             }
             var me = this;
             this.draw = function () {
@@ -570,7 +574,11 @@ var Plot;
         function Pie(id, data, options) {
             this.data = [];
             for (var prop in data) {
-                this.data.push(new Plot.KVCDatum(prop, data[prop]));
+				var itemColour = null;
+				if(options.colour){
+					itemColour = options.colour[prop]
+				}
+                this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
             }
             var me = this;
             this.draw = function () {

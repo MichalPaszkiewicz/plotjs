@@ -20,7 +20,11 @@ module Plot {
             this.data = [];
 
             for (var prop in data) {
-                this.data.push(new KVCDatum(prop, data[prop]));
+				var itemColour = null;
+				if(options.colour){
+					itemColour = options.colour[prop];
+				}
+                this.data.push(new KVCDatum(prop, data[prop], itemColour));
             }
 
             var me = this;
