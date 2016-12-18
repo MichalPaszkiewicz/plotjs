@@ -17,7 +17,7 @@ namespace Plot {
 
             for (var prop in data) {
 				var itemColour = null;
-				if(options.colour){
+				if(options && options.colour){
 					itemColour = options.colour[prop]
 				}
                 this.data.push(new KVCDatum(prop, data[prop], itemColour));
