@@ -60,7 +60,9 @@ namespace Plot {
 
                     me.context.beginPath();
                     me.context.fillStyle = "black";
-                    me.context.font = Math.min(Math.min(minLength * 3 / 2, minLength * addAngle) / (me.data[i].key.length), 100) + "px Arial";
+                    var maximumSize = Math.min(Math.min(minLength * 3 / 2, minLength * addAngle) / (me.data[i].key.length), 50);
+                    var minimumSize = Math.max(12, maximumSize);
+                    me.context.font = minimumSize + "px Arial";
                     me.context.textBaseline = "middle";
                     me.context.textAlign = "center";
 
