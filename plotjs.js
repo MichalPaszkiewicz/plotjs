@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var Plot;
 (function (Plot) {
     var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/).test(navigator.userAgent);
@@ -48,38 +53,33 @@ var Plot;
                 me.draw();
             });
             Plot.plotManager.addPlot(me);
-            this.animate = function () {
-                me.animateNum = 0;
-                function animationFrame() {
-                    me.animateNum += 0.05;
-                    if (me.animateNum >= 1) {
-                        me.animateNum = 1;
-                        me.draw();
-                        return;
-                    }
-                    me.draw();
-                    window.requestAnimationFrame(animationFrame);
-                }
-                animationFrame();
-            };
             if (isMobile) {
                 this.animateNum = 1;
                 this.draw();
             }
             else {
-                this.animate();
+                setTimeout(function () { me.animate(); }, 20);
             }
         }
+        BasePlot.prototype.animate = function () {
+            var me = this;
+            me.animateNum = 0;
+            function animationFrame() {
+                me.animateNum += 0.05;
+                if (me.animateNum >= 1) {
+                    me.animateNum = 1;
+                    me.draw();
+                    return;
+                }
+                me.draw();
+                window.requestAnimationFrame(function () { return animationFrame(); });
+            }
+            animationFrame();
+        };
         return BasePlot;
-    })();
+    }());
     Plot.BasePlot = BasePlot;
 })(Plot || (Plot = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 /// <reference path="plot.ts" />
 var Plot;
 (function (Plot) {
@@ -89,20 +89,19 @@ var Plot;
     var Bar = (function (_super) {
         __extends(Bar, _super);
         function Bar(id, data, options) {
-            this.data = [];
+            var _this = _super.call(this, id, options, defaultOptions) || this;
+            _this.data = [];
             for (var prop in data) {
-				var itemColour = null;
-				if(options && options.colour){
-					itemColour = options.colour[prop]
-				}
-                this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
+                var itemColour = null;
+                if (options && options.colour) {
+                    itemColour = options.colour[prop];
+                }
+                _this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
             }
-            var me = this;
-            this.draw = function () {
+            var me = _this;
+            _this.draw = function () {
                 me.baseDraw();
-                var max = Plot.Maths.max(me.data, function (x) {
-                    return x.value;
-                });
+                var max = Plot.Maths.max(me.data, function (x) { return x.value; });
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin;
                 var top = me.options.margin + 10;
@@ -141,12 +140,10 @@ var Plot;
                     tempLeft += barWidth;
                 }
             };
-            this.hover = function (e) {
+            _this.hover = function (e) {
                 var mx = (e.clientX - me.canvas.offsetLeft);
                 var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
-                var max = Plot.Maths.max(me.data, function (x) {
-                    return x.value;
-                });
+                var max = Plot.Maths.max(me.data, function (x) { return x.value; });
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin;
                 var top = me.options.margin + 10;
@@ -202,10 +199,10 @@ var Plot;
                     tempLeft += barWidth;
                 }
             };
-            _super.call(this, id, options, defaultOptions);
+            return _this;
         }
         return Bar;
-    })(Plot.BasePlot);
+    }(Plot.BasePlot));
     Plot.Bar = Bar;
 })(Plot || (Plot = {}));
 var Plot;
@@ -222,14 +219,13 @@ var Plot;
     var BoxAndWhisker = (function (_super) {
         __extends(BoxAndWhisker, _super);
         function BoxAndWhisker(id, data, options) {
-            this.data = [];
-            this.data = Plot.toXData(data);
-            var me = this;
-            this.draw = function () {
+            var _this = _super.call(this, id, options, defaultOptions) || this;
+            _this.data = [];
+            _this.data = Plot.toXData(data);
+            var me = _this;
+            _this.draw = function () {
                 me.baseDraw();
-                var max = Plot.Maths.max(me.data, function (x) {
-                    return x.value;
-                });
+                var max = Plot.Maths.max(me.data, function (x) { return x.value; });
                 var totalTop = me.options.margin;
                 var totalBottom = me.canvas.height - me.options.margin;
                 var top = totalTop;
@@ -239,9 +235,7 @@ var Plot;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
                 var totalMax = Plot.Maths.max(me.data, function (x) {
-                    return Plot.Maths.max(x.data, function (y) {
-                        return y.x;
-                    });
+                    return Plot.Maths.max(x.data, function (y) { return y.x; });
                 });
                 // draw axis
                 me.context.beginPath();
@@ -255,12 +249,8 @@ var Plot;
                 var singlePlotHeight = effectiveHeight / me.data.length;
                 for (var i = 0; i < me.data.length; i++) {
                     me.context.strokeStyle = me.data[i].colour;
-                    var min = Plot.Maths.min(me.data[i].data, function (x) {
-                        return x.x;
-                    });
-                    var max = Plot.Maths.max(me.data[i].data, function (x) {
-                        return x.x;
-                    });
+                    var min = Plot.Maths.min(me.data[i].data, function (x) { return x.x; });
+                    var max = Plot.Maths.max(me.data[i].data, function (x) { return x.x; });
                     var lowerQuartile = Plot.Maths.lowerQuartile(me.data[i].data);
                     var upperQuartile = Plot.Maths.upperQuartile(me.data[i].data);
                     var median = Plot.Maths.median(me.data[i].data);
@@ -278,12 +268,10 @@ var Plot;
                     me.context.stroke();
                 }
             };
-            this.hover = function (e) {
+            _this.hover = function (e) {
                 var mx = (e.clientX - me.canvas.offsetLeft);
                 var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
-                var max = Plot.Maths.max(me.data, function (x) {
-                    return x.value;
-                });
+                var max = Plot.Maths.max(me.data, function (x) { return x.value; });
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin;
                 var top = me.options.margin;
@@ -305,11 +293,9 @@ var Plot;
                         me.context.globalAlpha = 1;
                         // tooltip text
                         var fontSize = 16;
-                        var txt = "Median: " + Plot.Maths.median(me.data[i].data) + "  ||  Range: [ " + Plot.Maths.min(me.data[i].data, function (x) {
-                            return x.x;
-                        }) + " : " + Plot.Maths.max(me.data[i].data, function (x) {
-                            return x.x;
-                        }) + " ]";
+                        var txt = "Median: " + Plot.Maths.median(me.data[i].data) + "  ||  Range: [ "
+                            + Plot.Maths.min(me.data[i].data, function (x) { return x.x; }) + " : "
+                            + Plot.Maths.max(me.data[i].data, function (x) { return x.x; }) + " ]";
                         var w = (txt.length) * 10;
                         var txtY = -40;
                         var txtX = mx;
@@ -341,10 +327,10 @@ var Plot;
                     }
                 }
             };
-            _super.call(this, id, options, defaultOptions);
+            return _this;
         }
         return BoxAndWhisker;
-    })(Plot.BasePlot);
+    }(Plot.BasePlot));
     Plot.BoxAndWhisker = BoxAndWhisker;
 })(Plot || (Plot = {}));
 var Plot;
@@ -358,7 +344,7 @@ var Plot;
             }
         }
         return Curve;
-    })();
+    }());
     Plot.Curve = Curve;
 })(Plot || (Plot = {}));
 var Plot;
@@ -373,7 +359,7 @@ var Plot;
             }
         }
         return KVCDatum;
-    })();
+    }());
     Plot.KVCDatum = KVCDatum;
 })(Plot || (Plot = {}));
 var Plot;
@@ -388,7 +374,7 @@ var Plot;
             }
         }
         return xData;
-    })();
+    }());
     Plot.xData = xData;
     function toXData(items) {
         if (Object.prototype.toString.call(items) === "[object Array]") {
@@ -398,8 +384,8 @@ var Plot;
             var isWorking = true;
             for (var i = 0; i < items.length; i++) {
                 if (items[i].values == null || items[i].colour == null) {
-                    throw new Error("The x data supplied is incorrect");
                     isWorking = false;
+                    throw new Error("The x data supplied is incorrect");
                 }
             }
             if (isWorking) {
@@ -435,7 +421,7 @@ var Plot;
             }
         }
         return xyData;
-    })();
+    }());
     Plot.xyData = xyData;
     function toXYData(items) {
         if (Object.prototype.toString.call(items) === "[object Array]") {
@@ -445,8 +431,8 @@ var Plot;
             var isWorking = true;
             for (var i = 0; i < items.length; i++) {
                 if (items[i].values == null || items[i].colour == null) {
-                    throw new Error("The xy data supplied is incorrect");
                     isWorking = false;
+                    throw new Error("The xy data supplied is incorrect");
                 }
             }
             if (isWorking) {
@@ -507,7 +493,6 @@ var Plot;
             else {
                 return (items[half - 1].x + items[half].x) / 2.0;
             }
-            return 0;
         }
         Maths.median = median;
         function lowerQuartile(items) {
@@ -521,7 +506,6 @@ var Plot;
             else {
                 return (items[quarter - 1].x + items[quarter].x) / 2.0;
             }
-            return 0;
         }
         Maths.lowerQuartile = lowerQuartile;
         function upperQuartile(items) {
@@ -535,7 +519,6 @@ var Plot;
             else {
                 return (items[threeQuarter - 1].x + items[threeQuarter].x) / 2.0;
             }
-            return 0;
         }
         Maths.upperQuartile = upperQuartile;
         function getSplits(minNum, maxNum, splits) {
@@ -572,16 +555,17 @@ var Plot;
     var Pie = (function (_super) {
         __extends(Pie, _super);
         function Pie(id, data, options) {
-            this.data = [];
+            var _this = _super.call(this, id, data, defaultOptions) || this;
+            _this.data = [];
             for (var prop in data) {
-				var itemColour = null;
-				if(options && options.colour){
-					itemColour = options.colour[prop]
-				}
-                this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
+                var itemColour = null;
+                if (options && options.colour) {
+                    itemColour = options.colour[prop];
+                }
+                _this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
             }
-            var me = this;
-            this.draw = function () {
+            var me = _this;
+            me.draw = function () {
                 me.baseDraw();
                 var total = 0;
                 for (var i = 0; i < me.data.length; i++) {
@@ -609,7 +593,7 @@ var Plot;
                     me.context.fillText(me.data[i].key, x + 2 * minLength / 3 * Math.cos(oldAngle + addAngle / 2), y + 2 * minLength / 3 * Math.sin(oldAngle + addAngle / 2), minLength);
                 }
             };
-            this.hover = function (e) {
+            me.hover = function (e) {
                 var cx = me.canvas.width / 2;
                 var cy = me.canvas.height / 2;
                 var mx = (e.clientX - me.canvas.offsetLeft);
@@ -687,10 +671,10 @@ var Plot;
                     }
                 }
             };
-            _super.call(this, id, options, defaultOptions);
+            return _this;
         }
         return Pie;
-    })(Plot.BasePlot);
+    }(Plot.BasePlot));
     Plot.Pie = Pie;
 })(Plot || (Plot = {}));
 /// <reference path="plot.ts" />
@@ -715,7 +699,8 @@ var Plot;
             };
         }
         return PlotManager;
-    })();
+    }());
+    Plot.PlotManager = PlotManager;
     Plot.plotManager = new PlotManager();
 })(Plot || (Plot = {}));
 var Plot;
@@ -726,13 +711,14 @@ var Plot;
     var Scatter = (function (_super) {
         __extends(Scatter, _super);
         function Scatter(id, data, options) {
-            this.curves = [];
-            this.data = Plot.toXYData(data);
-            var me = this;
-            this.addCurve = function (formula, colour) {
+            var _this = _super.call(this, id, options, defaultOptions) || this;
+            _this.curves = [];
+            _this.data = Plot.toXYData(data);
+            var me = _this;
+            _this.addCurve = function (formula, colour) {
                 me.curves.push(new Plot.Curve(formula, colour));
             };
-            this.draw = function () {
+            _this.draw = function () {
                 me.baseDraw();
                 var left = me.options.margin;
                 var right = me.canvas.width - me.options.margin - 10;
@@ -740,26 +726,10 @@ var Plot;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
-                var maxX = Plot.Maths.max(me.data, function (x) {
-                    return Plot.Maths.max(x.data, function (y) {
-                        return y.x;
-                    });
-                });
-                var maxY = Plot.Maths.max(me.data, function (x) {
-                    return Plot.Maths.max(x.data, function (y) {
-                        return y.y;
-                    });
-                });
-                var minValX = Plot.Maths.min(me.data, function (x) {
-                    return Plot.Maths.min(x.data, function (y) {
-                        return y.x;
-                    });
-                });
-                var minValY = Plot.Maths.min(me.data, function (x) {
-                    return Plot.Maths.min(x.data, function (y) {
-                        return y.y;
-                    });
-                });
+                var maxX = Plot.Maths.max(me.data, function (x) { return Plot.Maths.max(x.data, function (y) { return y.x; }); });
+                var maxY = Plot.Maths.max(me.data, function (x) { return Plot.Maths.max(x.data, function (y) { return y.y; }); });
+                var minValX = Plot.Maths.min(me.data, function (x) { return Plot.Maths.min(x.data, function (y) { return y.x; }); });
+                var minValY = Plot.Maths.min(me.data, function (x) { return Plot.Maths.min(x.data, function (y) { return y.y; }); });
                 var minX = Math.min(0, minValX);
                 var minY = Math.min(0, minValY);
                 var yAxisPosition = 0;
@@ -846,7 +816,7 @@ var Plot;
                     }
                 }
             };
-            this.hover = function (e) {
+            _this.hover = function (e) {
                 var mx = (e.clientX - me.canvas.offsetLeft);
                 var my = (e.clientY - me.canvas.offsetTop + document.body.scrollTop);
                 var left = me.options.margin;
@@ -855,26 +825,10 @@ var Plot;
                 var bottom = me.canvas.height - me.options.margin;
                 var effectiveHeight = bottom - top;
                 var effectiveWidth = right - left;
-                var maxX = Plot.Maths.max(me.data, function (x) {
-                    return Plot.Maths.max(x.data, function (y) {
-                        return y.x;
-                    });
-                });
-                var maxY = Plot.Maths.max(me.data, function (x) {
-                    return Plot.Maths.max(x.data, function (y) {
-                        return y.y;
-                    });
-                });
-                var minValX = Plot.Maths.min(me.data, function (x) {
-                    return Plot.Maths.min(x.data, function (y) {
-                        return y.x;
-                    });
-                });
-                var minValY = Plot.Maths.min(me.data, function (x) {
-                    return Plot.Maths.min(x.data, function (y) {
-                        return y.y;
-                    });
-                });
+                var maxX = Plot.Maths.max(me.data, function (x) { return Plot.Maths.max(x.data, function (y) { return y.x; }); });
+                var maxY = Plot.Maths.max(me.data, function (x) { return Plot.Maths.max(x.data, function (y) { return y.y; }); });
+                var minValX = Plot.Maths.min(me.data, function (x) { return Plot.Maths.min(x.data, function (y) { return y.x; }); });
+                var minValY = Plot.Maths.min(me.data, function (x) { return Plot.Maths.min(x.data, function (y) { return y.y; }); });
                 var minX = Math.min(0, minValX);
                 var minY = Math.min(0, minValY);
                 var setX = 0;
@@ -938,10 +892,10 @@ var Plot;
                 me.context.textAlign = "center";
                 me.context.fillText(txt, txtX, my + txtY + 15);
             };
-            _super.call(this, id, options, defaultOptions);
+            return _this;
         }
         return Scatter;
-    })(Plot.BasePlot);
+    }(Plot.BasePlot));
     Plot.Scatter = Scatter;
 })(Plot || (Plot = {}));
 //# sourceMappingURL=plotjs.js.map

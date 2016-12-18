@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     export interface xyDatum {
         x: number;
@@ -33,8 +33,8 @@
 
             for (var i = 0; i < items.length; i++) {
                 if (items[i].values == null || items[i].colour == null) {
+                    isWorking = false;                    
                     throw new Error("The xy data supplied is incorrect");
-                    isWorking = false;
                 }
             }
 

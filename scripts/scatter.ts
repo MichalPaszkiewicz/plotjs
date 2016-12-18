@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     var defaultOptions = {
 
@@ -16,6 +16,7 @@
         addCurve: (x: any, colour: string) => void;
 
         constructor(id: string, data: any, options: any) {
+            super(id, options, defaultOptions);
 
             this.curves = [];
 
@@ -252,8 +253,6 @@
                 me.context.fillText(txt, txtX, my + txtY + 15);
 
             }
-            super(id, options, defaultOptions);
-
         }
     }
 
