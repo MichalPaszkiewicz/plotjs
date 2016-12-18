@@ -93,7 +93,7 @@ var Plot;
             _this.data = [];
             for (var prop in data) {
                 var itemColour = null;
-                if (options.colour) {
+                if (options && options.colour) {
                     itemColour = options.colour[prop];
                 }
                 _this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
@@ -559,7 +559,7 @@ var Plot;
             _this.data = [];
             for (var prop in data) {
                 var itemColour = null;
-                if (options.colour) {
+                if (options && options.colour) {
                     itemColour = options.colour[prop];
                 }
                 _this.data.push(new Plot.KVCDatum(prop, data[prop], itemColour));
