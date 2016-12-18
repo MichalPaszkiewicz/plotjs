@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     function drawLineAt(item: BoxAndWhisker, x, y, height) {
         item.context.moveTo(x, y + height / 2);
@@ -17,7 +17,8 @@
 
         data: xData[];
 
-        constructor(id: string, data: any, options?: Object) {
+        constructor(id: string, data: any, options?: any) {
+            super(id, options, defaultOptions);
             this.data = [];
 
             this.data = toXData(data);
@@ -160,9 +161,6 @@
                 }
 
             }
-
-            super(id, options, defaultOptions);
-
         }
     }
 } 

@@ -1,5 +1,5 @@
 ﻿/// <reference path="plot.ts" />
-module Plot {
+namespace Plot {
 
     function hover(item: Pie) {
 
@@ -16,7 +16,9 @@ module Plot {
         data: KVCDatum[];
 
 
-        constructor(id: string, data: any, options?: Object) {
+        constructor(id: string, data: any, options?: any) {
+            super(id, data, defaultOptions);
+
             this.data = [];
 
             for (var prop in data) {
@@ -29,7 +31,7 @@ module Plot {
 
             var me = this;
 
-            this.draw = function () {
+            me.draw = function () {
                 me.baseDraw();
 
                 var total = 0;
@@ -66,7 +68,7 @@ module Plot {
                 }
             }
 
-            this.hover = function (e: MouseEvent) {
+            me.hover = function (e: MouseEvent) {
                 var cx = me.canvas.width / 2;
                 var cy = me.canvas.height / 2;
 
@@ -166,8 +168,6 @@ module Plot {
                     }
                 }
             }
-
-            super(id, options, defaultOptions);
         }
 
     }

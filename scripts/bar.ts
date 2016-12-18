@@ -1,5 +1,5 @@
 ﻿/// <reference path="plot.ts" />
-module Plot {
+namespace Plot {
 
     var defaultOptions = {
 
@@ -11,7 +11,8 @@ module Plot {
 
         data: KVCDatum[];
 
-        constructor(id: string, data: any, options: Object) {
+        constructor(id: string, data: any, options: any) {
+            super(id, options, defaultOptions);
             this.data = [];        
 
             for (var prop in data) {
@@ -151,9 +152,6 @@ module Plot {
                 }
 
             }
-
-            super(id, options, defaultOptions);
-
         }
     }
 

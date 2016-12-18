@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     var isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/).test(navigator.userAgent);
 
@@ -22,8 +22,6 @@
         baseHover: () => void;
 
         options: any;
-
-        animate: () => void;
 
         animateNum: number;
 
@@ -87,7 +85,17 @@
 
             plotManager.addPlot(me);
 
-            this.animate = function () {
+            if (isMobile) {
+                this.animateNum = 1;
+                this.draw();
+            }
+            else {
+                setTimeout(() => { me.animate(); }, 20);
+            }
+        }
+
+        animate() {
+            var me = this;
                 me.animateNum = 0;
 
                 function animationFrame() {
@@ -98,21 +106,12 @@
                         return;
                     }
                     me.draw();
-                    window.requestAnimationFrame(animationFrame);
+                    window.requestAnimationFrame(() => animationFrame());
                 }
 
                 animationFrame();
 
             }
-
-            if (isMobile) {
-                this.animateNum = 1;
-                this.draw();
-            }
-            else {
-                this.animate();
-            }
-        }
     }
 
 } 

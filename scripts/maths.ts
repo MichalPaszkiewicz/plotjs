@@ -1,4 +1,4 @@
-﻿module Plot.Maths {
+﻿namespace Plot.Maths {
 
     export function max(items: any[], value: (item: any) => number): number {
 
@@ -42,8 +42,6 @@
         else {
             return (items[half - 1].x + items[half].x) / 2.0;
         }
-
-        return 0;
     }
 
     export function lowerQuartile(items: xDatum[]): number {
@@ -60,8 +58,6 @@
         else {
             return (items[quarter - 1].x + items[quarter].x) / 2.0;
         }
-
-        return 0;
     }
 
     export function upperQuartile(items: xDatum[]): number {
@@ -78,8 +74,6 @@
         else {
             return (items[threeQuarter - 1].x + items[threeQuarter].x) / 2.0;
         }
-
-        return 0;
     }
 
     export function getSplits(minNum, maxNum, splits): number[] {

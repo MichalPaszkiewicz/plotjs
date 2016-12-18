@@ -1,9 +1,9 @@
 ﻿/// <reference path="plot.ts" />
-module Plot {
+namespace Plot {
 
     var wndw = { h: window.innerHeight, w: window.innerWidth };
 
-    class PlotManager{
+    export class PlotManager{
 
         plots: BasePlot[];
 

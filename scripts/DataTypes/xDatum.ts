@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     export interface xDatum {
         x: number;
@@ -32,8 +32,8 @@
 
             for (var i = 0; i < items.length; i++) {
                 if (items[i].values == null || items[i].colour == null) {
+                    isWorking = false;                    
                     throw new Error("The x data supplied is incorrect");
-                    isWorking = false;
                 }
             }
 

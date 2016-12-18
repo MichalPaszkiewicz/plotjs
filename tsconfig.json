@@ -1,0 +1,8 @@
+{
+	"compilerOptions":	{
+		"target": "es5",
+		"out": "plotjs.js",
+		"sourceMap": true,
+		"declaration": true
+	}
+}

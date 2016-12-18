@@ -1,4 +1,4 @@
-﻿module Plot {
+﻿namespace Plot {
 
     export class KVCDatum {
         key: string;
