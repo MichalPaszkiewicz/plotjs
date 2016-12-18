@@ -555,7 +555,7 @@ var Plot;
     var Pie = (function (_super) {
         __extends(Pie, _super);
         function Pie(id, data, options) {
-            var _this = _super.call(this, id, data, defaultOptions) || this;
+            var _this = _super.call(this, id, options, defaultOptions) || this;
             _this.data = [];
             for (var prop in data) {
                 var itemColour = null;

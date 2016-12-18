@@ -17,7 +17,7 @@ namespace Plot {
 
 
         constructor(id: string, data: any, options?: any) {
-            super(id, data, defaultOptions);
+            super(id, options, defaultOptions);
 
             this.data = [];
 
