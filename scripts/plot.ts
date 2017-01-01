@@ -86,8 +86,8 @@
             plotManager.addPlot(me);
 
             if (isMobile) {
-                this.animateNum = 1;
-                this.draw();
+                me.animateNum = 1;
+                setTimeout(() => { me.draw(); }, 20);
             }
             else {
                 setTimeout(() => { me.animate(); }, 20);
